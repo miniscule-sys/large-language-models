@@ -1,10 +1,11 @@
 # LLM Pretraining: GPT with Mixture of Experts  
 
-This repository contains a clean, self-contained, and thoroughly documented implementation of a Custom Generative Pre-trained Transformer (GPT) featuring a Sparse Mixture of Experts (MoE) routing layer. Developed initially for deployment and exploration within Google Colab, this architecture highlights how to implement 
+This repository contains a clean, self-contained, and documented implementation of a Custom Generative Pre-trained Transformer (GPT) featuring a Sparse Mixture of Experts (MoE) routing layer. Developed initially for research and exploration within Google Colab, this architecture highlights how to implement Multi-Head Self Attention with Dense FeedForward OR Sparse Mixture-of-Experts network.  
 
 
 ## 🚀 Key Features  
-* **Sparse MoE** Core: Custom token routing logic mapping tokens to top-$k$ expert sub-networks to increase model capacity without proportional compute costs.  
+* **Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top-$k$ expert sub-networks to increase model capacity without proportional compute costs.
+* **Dropless Routing** for MoE: It processes every single token. If an expert is assigned 10x more tokens than others, the model calculates all of them. This ensures no information loss and makes it run faster in GPU based training.  
 * **RoPE** and **YaRN** scaling: Advanced positional encoding to improve long-context coherence and relative positional tracking.  
 * RMSNorm: Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
 * Hyperparameter Scaling Configuration: Integrated tuning layout designed to quickly experiment with model sizes, expert counts, and optimization boundaries.  
