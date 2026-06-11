@@ -4,7 +4,7 @@ This repository contains a clean, self-contained, and documented implementation 
 
 
 ## 🚀 Key Features  
-* **Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top-$k$ expert sub-networks to increase model capacity without proportional compute costs.
+* **Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
 * **Dropless Routing** for MoE: It processes every single token. If an expert is assigned 10x more tokens than others, the model calculates all of them. This ensures no information loss and makes it run faster in GPU based training.  
 * **RoPE** and **YaRN** scaling: Advanced positional encoding to improve long-context coherence and relative positional tracking.  
 * RMSNorm: Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
