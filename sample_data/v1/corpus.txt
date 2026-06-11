@@ -1,0 +1,639 @@
+Hello and Welcome, people of the world! 
+
+We are accounted poor citizens, the patricians good. What authority surfeits on would relieve us: if they would yield us but the superfluity, while it were wholesome, we might guess they relieved us humanely; but they think we are too dear: the leanness that afflicts us, the object of our misery, is as an inventory to particularise their abundance; our sufferance is a gain to them. Let us revenge this with our pikes, ere we become rakes: for the gods know I speak this in hunger for bread, not in thirst for revenge. 
+
+The cat (Felis catus), also called domestic cat and house cat, is a small carnivorous mammal. It is an obligate carnivore, requiring a predominantly meat-based diet. Its retractable claws are adapted to killing small prey species such as mice and rats. 
+
+Q: How many 's' is there in Strawberry? 
+A: One (1) 
+
+Q: How many 'r' are there in straawberry? 
+A: Three (3) 
+
+Q: How many 'a' are there in Straawberry? 
+A: Two (2) 
+
+Q: How many 'a' are there in apple? 
+A: One (1) 
+
+Q: How many 'a' are there in aapple?
+A: Two (2) 
+
+The archive opened at 06:10 local time. Dust from the upper shelves drifted through the beam of a maintenance lamp while the catalog engine rebuilt its index from fragmented records. Most entries were mundane: shipping manifests, weather observations, maintenance schedules, municipal permits. A smaller subset described experiments that had never been completed. Several folders referenced prototype energy systems designed for isolated settlements in cold regions. The reports were repetitive, technical, and incomplete, but the patterns across them suggested a coordinated program rather than unrelated research efforts.
+
+A freight train crossed the valley every evening at approximately the same time. Residents in the surrounding district adjusted their routines around the sound of the brakes and the vibration along the tracks. The grocery closed fifteen minutes earlier on delivery days, and the mechanic beside the station delayed test drives until after the final cargo transfer. During winter, snow accumulated against the retaining walls near the rail yard and required constant clearing to prevent equipment failure.
+
+The software deployment failed because the staging environment contained outdated dependency versions. Engineers initially assumed the issue originated in the authentication service, but log inspection revealed malformed cache entries produced during a rollback procedure. After recreating the environment from immutable infrastructure templates, the latency spikes disappeared. Monitoring dashboards returned to baseline within twenty minutes of the corrected deployment.
+
+Marine ecosystems near densely populated coastlines often exhibit measurable changes in nutrient concentration, species diversity, and sediment composition. Researchers monitoring tidal zones collect water samples at fixed intervals to establish long-term trends. Variability across seasons complicates interpretation because short-term anomalies may resemble structural ecological shifts. Statistical models therefore incorporate historical baselines and confidence intervals before generating predictive assessments.
+
+The bakery on the corner specialized in rye bread fermented with a culture maintained for more than three decades. New employees learned to adjust hydration levels according to humidity rather than relying strictly on written measurements. Customers typically arrived before sunrise on weekends, forming a queue that extended halfway down the block. By noon, most inventory had been sold and production shifted toward preparation for the following day.
+
+A satellite imaging system operating in low orbit captured multispectral observations of agricultural regions during a prolonged drought period. Analysts compared vegetation indices against previous years and identified clusters of unusually resilient crops. Further investigation showed that farms with diversified irrigation systems experienced lower yield volatility than neighboring operations dependent on a single reservoir source.
+
+The conference proceedings contained contributions from computational linguistics, robotics, distributed systems, and applied mathematics. Several papers focused on low-resource language modeling techniques using synthetic augmentation pipelines. Others examined coordination problems in autonomous vehicle fleets operating under limited communication bandwidth. Attendance exceeded projections after remote participation options were introduced.
+
+Temperature readings from the remote sensor array fluctuated beyond acceptable tolerance margins after midnight. Initial diagnostics suggested battery degradation, but subsequent inspection revealed ice accumulation on exposed connectors. Maintenance crews replaced the shielding material and recalibrated the instruments before reconnecting the telemetry feed. Data continuity was partially restored, although several hours of measurements remained unusable.
+
+Economic forecasts issued during the first quarter underestimated consumer demand for replacement electronics. Retail distributors responded by increasing overseas orders, which strained shipping capacity across multiple ports. Freight costs rose sharply for six consecutive weeks before stabilizing as additional vessels entered circulation. Smaller retailers struggled to compete with larger chains that had negotiated long-term transport contracts earlier in the year.
+
+The manuscript described a fictional republic governed through rotating administrative councils selected by lottery. Citizens viewed the system as imperfect but preferable to hereditary leadership structures that had dominated previous centuries. Public debates occurred in open forums where legal scholars, merchants, and labor representatives argued over taxation, infrastructure, and resource allocation. Historical sections of the text blended mythology with documented events, making precise interpretation difficult.
+
+Machine learning practitioners frequently distinguish between pretraining objectives and downstream task optimization. Large corpora provide broad statistical coverage of syntax, semantics, and factual associations, while supervised fine-tuning introduces narrower behavioral constraints. Data quality issues during pretraining can propagate through later stages of model development, especially when duplicated or automatically generated material dominates the corpus distribution.
+
+The mountain observatory remained operational despite severe weather conditions that damaged access roads throughout the region. Personnel rotated in two-week intervals and relied on satellite communications for logistical coordination. Astronomical measurements collected during winter months were considered especially valuable because atmospheric interference declined substantially at lower temperatures.
+
+A regional health network migrated patient scheduling systems from legacy servers to a cloud-native architecture over an eighteen-month period. Administrators prioritized interoperability with existing medical record standards to reduce operational disruption. Early pilot deployments encountered synchronization problems between clinics using inconsistent timestamp formats. Standardization protocols eventually resolved the discrepancies.
+
+In the manufacturing district, robotic assembly units handled repetitive fastening operations while human technicians supervised calibration and exception handling. Productivity metrics improved after sensor fusion systems were integrated into the quality assurance pipeline. Defect detection accuracy increased significantly for components with reflective surfaces that had previously confused optical inspection systems.
+
+The library preserved newspapers printed during periods of political unrest. Many editions contained conflicting casualty estimates, inconsistent maps, and anonymous editorials written under pseudonyms. Historians cross-referenced these sources with diplomatic cables and census records to reconstruct a more reliable timeline of events. Even then, several episodes remained disputed decades later.
+
+### SAMPLE 1: Python Rate Limiter
+
+User:
+Implement a token bucket rate limiter in Python.
+
+Assistant:
+```python
+import time
+from threading import Lock
+
+
+class TokenBucket:
+    def __init__(self, capacity: int, refill_rate: float):
+        if capacity <= 0:
+            raise ValueError("capacity must be positive")
+
+        if refill_rate <= 0:
+            raise ValueError("refill_rate must be positive")
+
+        self.capacity = capacity
+        self.tokens = capacity
+        self.refill_rate = refill_rate
+        self.last_refill = time.monotonic()
+        self.lock = Lock()
+
+    def _refill(self):
+        now = time.monotonic()
+        elapsed = now - self.last_refill
+
+        new_tokens = elapsed * self.refill_rate
+
+        if new_tokens > 0:
+            self.tokens = min(
+                self.capacity,
+                self.tokens + new_tokens
+            )
+            self.last_refill = now
+
+    def allow_request(self, tokens: int = 1) -> bool:
+        with self.lock:
+            self._refill()
+
+            if self.tokens >= tokens:
+                self.tokens -= tokens
+                return True
+
+            return False
+```
+
+Explanation:
+- Token bucket algorithms permit bursts while enforcing average throughput.
+- The refill step computes newly available capacity using elapsed monotonic time.
+- A lock prevents concurrent state corruption.
+- Complexity is O(1) per request.
+
+---
+
+### SAMPLE 2: SQL Optimization
+
+User:
+Optimize this SQL query for a table with 100 million rows.
+
+```sql
+SELECT *
+FROM orders
+WHERE YEAR(created_at) = 2025;
+```
+
+Assistant:
+Applying a function to an indexed column prevents efficient index usage.
+
+Instead of:
+
+```sql
+WHERE YEAR(created_at) = 2025
+```
+
+use a range predicate:
+
+```sql
+SELECT *
+FROM orders
+WHERE created_at >= '2025-01-01'
+  AND created_at < '2026-01-01';
+```
+
+Why this is faster:
+- Enables index range scans.
+- Avoids full table scans.
+- Reduces CPU overhead from function evaluation.
+
+Recommended index:
+
+```sql
+CREATE INDEX idx_orders_created_at
+ON orders(created_at);
+```
+
+Expected improvement:
+- Full scan complexity approaches O(n).
+- Indexed range scans are substantially more selective and scale better for large datasets.
+
+---
+
+### SAMPLE 3: JavaScript Debounce
+
+User:
+Write a debounce utility in JavaScript.
+
+Assistant:
+```javascript
+function debounce(fn, delay) {
+    let timerId = null;
+
+    return function (...args) {
+        const context = this;
+
+        clearTimeout(timerId);
+
+        timerId = setTimeout(() => {
+            fn.apply(context, args);
+        }, delay);
+    };
+}
+```
+
+Example:
+
+```javascript
+window.addEventListener(
+    "resize",
+    debounce(() => {
+        console.log("resized");
+    }, 300)
+);
+```
+
+Behavior:
+- Multiple rapid calls collapse into one execution.
+- Commonly used for resize, scroll, and search input handlers.
+
+---
+
+### SAMPLE 4: Go Worker Pool
+
+User:
+Implement a worker pool in Go.
+
+Assistant:
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type Job struct {
+	ID int
+}
+
+func worker(id int, jobs <-chan Job, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for job := range jobs {
+		fmt.Printf("worker=%d processing job=%d\n", id, job.ID)
+	}
+}
+
+func main() {
+	const workerCount = 4
+
+	jobs := make(chan Job, 10)
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go worker(i, jobs, &wg)
+	}
+
+	for i := 0; i < 20; i++ {
+		jobs <- Job{ID: i}
+	}
+
+	close(jobs)
+
+	wg.Wait()
+}
+```
+
+Key concepts:
+- Channels coordinate work distribution.
+- Goroutines execute concurrently.
+- WaitGroup synchronizes shutdown.
+
+---
+
+### SAMPLE 5: Binary Search Explanation
+
+User:
+Explain binary search with Python code.
+
+Assistant:
+Binary search requires sorted input and repeatedly halves the search interval.
+
+```python
+def binary_search(nums, target):
+    left = 0
+    right = len(nums) - 1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if nums[mid] == target:
+            return mid
+
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
+```
+
+Complexity:
+- Time: O(log n)
+- Space: O(1)
+
+Example:
+- Searching 1 million sorted items requires approximately 20 comparisons.
+
+---
+
+### SAMPLE 6: Docker Multi-Stage Build
+
+User:
+Reduce Docker image size for a Node.js service.
+
+Assistant:
+Use a multi-stage build.
+
+```dockerfile
+FROM node:20 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+
+RUN npm ci --omit=dev
+
+CMD ["node", "dist/server.js"]
+```
+
+Benefits:
+- Removes build dependencies from final image.
+- Reduces attack surface.
+- Improves deployment speed.
+
+---
+
+### SAMPLE 7: C++ Memory Leak Fix
+
+User:
+Find the bug.
+
+```cpp
+int* buildArray() {
+    int* arr = new int[100];
+    return arr;
+}
+
+int main() {
+    int* data = buildArray();
+}
+```
+
+Assistant:
+The dynamically allocated array is never freed, causing a memory leak.
+
+Corrected version:
+
+```cpp
+#include <memory>
+
+std::unique_ptr<int[]> buildArray() {
+    return std::make_unique<int[]>(100);
+}
+
+int main() {
+    auto data = buildArray();
+}
+```
+
+Why this is better:
+- Uses RAII.
+- Prevents forgotten delete[] calls.
+- Exception-safe ownership semantics.
+
+---
+
+### SAMPLE 8: Redis Caching Strategy
+
+User:
+How should I cache database queries with Redis?
+
+Assistant:
+A common approach is cache-aside.
+
+Flow:
+1. Application checks Redis.
+2. If cache miss:
+   - query database
+   - store result in Redis
+3. Return data.
+
+Pseudo-code:
+
+```python
+def get_user(user_id):
+    cache_key = f"user:{user_id}"
+
+    cached = redis.get(cache_key)
+
+    if cached:
+        return deserialize(cached)
+
+    user = db.fetch_user(user_id)
+
+    redis.setex(
+        cache_key,
+        300,
+        serialize(user)
+    )
+
+    return user
+```
+
+Important considerations:
+- TTL expiration
+- Cache invalidation
+- Serialization overhead
+- Hot-key mitigation
+- Consistency guarantees
+
+---
+
+### SAMPLE 9: Rust Ownership
+
+User:
+Explain ownership in Rust.
+
+Assistant:
+Rust ownership enforces memory safety without garbage collection.
+
+Core rules:
+1. Each value has one owner.
+2. Ownership can move.
+3. When the owner goes out of scope, the value is dropped.
+
+Example:
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+
+    let s2 = s1;
+
+    // println!("{}", s1); // invalid
+    println!("{}", s2);
+}
+```
+
+Why:
+- Ownership moved from s1 to s2.
+- Prevents use-after-free bugs.
+
+Borrowing:
+
+```rust
+fn print_len(s: &String) {
+    println!("{}", s.len());
+}
+```
+
+References allow access without ownership transfer.
+
+---
+
+### SAMPLE 10: API Retry Logic
+
+User:
+Implement exponential backoff retry logic in Python.
+
+Assistant:
+```python
+import random
+import time
+
+
+def retry(operation, retries=5, base_delay=0.5):
+    for attempt in range(retries):
+        try:
+            return operation()
+
+        except Exception:
+            if attempt == retries - 1:
+                raise
+
+            delay = (
+                base_delay *
+                (2 ** attempt)
+            )
+
+            jitter = random.uniform(0, 0.1)
+
+            time.sleep(delay + jitter)
+```
+
+Properties:
+- Reduces retry storms.
+- Jitter prevents synchronized retries.
+- Common in distributed systems and API clients.
+
+
+# Article # 
+
+To train an LM, we must first obtain a large amount of unlabeled text. Then, we can perform self-supervised learning by iterating over the following steps:
+
+* Sample some text
+* Try to predict the next word
+* Update your model based on the “correct” next word
+
+This process, referred to as language model pre-training, is illustrated within the figure above. Interestingly, this training procedure allows the (L)LM to learn from a large amount of data, as the textual data from which we are learning requires no human annotations! We can just download a lot of raw textual data from the internet and use it for pre-training. Learning from such a large corpus is incredibly beneficial to developing a diverse, comprehensive understanding of language.
+
+creating foundation models. If we pre-train an LLM (which, by the way, is an expensive process), we get access to a neural network that, given some text, can accurately predict the next word. Initially, this might not seem that useful, but these LLMs have an incredible foundation of knowledge in natural language.
+
+To understand why this is the case, we need to first recognize that predicting the next word in a sequence of text is a difficult problem—even doing this as a human is not trivial! Accurately choosing this next word actually requires the model to develop an in-depth, nuanced understanding of language. This understanding is incredibly beneficial, as it can be repurposed for solving other types of linguistic tasks!
+
+In other words, these LLMs are a type of foundation model—a generic term referring to large neural networks that can be repurposed to solve a wide variety of tasks. The learning process for these foundation models proceeds in two-phases: pre-training and in-context learning. The pre-training procedure is described above, while in-context learning refers to the process of using the generic LLM to solve a more specific, downstream task.
+
+wait… how do we do this? There are many ways we can repurpose LLMs to solving downstream tasks. Currently, a lot of the research studies zero and few-shot inference techniques for solving various tasks with LLMs. At a high level, these techniques solve a downstream task by reframing it as a next-word prediction problem. For example, we can pass the following prompts to an LLM:
+
+“Summarize the following document: <document> ⇒” 
+
+“Translate this sentence into french: <sentence> ⇒”
+
+Then, using next-word prediction, we can generate a textual response to this prompt that (ideally) should answer our desired question. We solve the task by just prompting/asking the LLM to solve the task for us! The above prompts are examples of zero-shot learning. We could also perform few-shot learning, in which we additionally provide several examples of correct outputs within our prompt; see below for an example.
+
+Few-shot learning with LLMs was popularized by GPT-3 [7], which showed that language models of a certain scale perform relatively well using such techniques. However, this performance still lags behind baseline techniques that solve downstream tasks via supervised learning or fine-tuning.
+
+Instead of performing few-shot inference, we could just fine-tune (i.e., update the model’s parameters based on training over pairs of input and desired output) the LLM; see the figure above. This approach performs quite well, but it does have some drawbacks:
+
+Further training is required (may be expensive)
+
+A specialized model is required for each downstream task
+
+It would be great to solve all tasks accurately with a single model. In fact, this is the ultimate goal of foundation models. For now, however, it seems like fine-tuning might be necessary to achieve the best performance. Nonetheless, we will see in this overview that most current research measures LLM performance using zero/few-shot inference.
+
+this overview
+By now, hopefully the concept of LLMs and how they work is somewhat clear. Within this overview, we will focus on (i) training larger LLMs and (ii) using larger datasets for pre-training. Modern LLMs are based upon decoder-only transformer architectures. The size of these models can be increased by either adding more layers or increasing the width of each layer. To obtain more data to train these models, we typically just scrape text from the web using tools like Common Crawl or use large sources of textual data like the Pile dataset [5].
+
+We will study four papers that explore modern LLMs and attempt to improve upon the results of GPT-3. Initial attempts of training larger models fall somewhat short of the expectations set by GPT-3—the performance improvements we get aren’t as good as we would hope. Later work finds that there is more to making LLMs successful than simply making them larger—we also have to improve the size and quality of the pre-training corpus. This leads to the proposal of more efficient LLMs that achieve remarkable results by training smaller models over more data. Let’s take a look!
+
+Enjoy deep learning? Find current research topics difficult to track or understand? Join the >1.5K subscribers that use Deep (Learning) Focus to better understand AI research by adding your email below!
+
+Type your email...
+Subscribe
+Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model [1]
+Although LLMs were already pretty large (e.g., GPT-3 [7] contains 175 billion parameters), MT-NLG 530B, proposed in [1], took this to a new level. A collaboration between Nvidia and Microsoft, this work trained an LLM with 530 billion parameters. Models like GPT-3 were already hard to train due to their size, so training MT-NLG 530B—another decoder-only transformer with >3X more parameters as shown in the figure below—was obviously quite difficult. In fact, MT-NLG required a dedicated compute cluster and several distributed training innovations to make the training tractable and efficient.
+
+The model is trained using a combination of data, model/pipeline, and tensor parallelism; see here for a quick discussion of these concepts. The proposed distributed training methodology, which is based upon the Megatron-LM library, is the main contribution of this work—simply engineering a system capable of training an LLM with 530 billion parameters is incredibly non-trivial.
+
+When we perform distributed training, there are two basic ways we can add more GPUs to the training process:
+
+Add more GPUs to your machine
+
+Add more machines, each of which have GPUs
+
+The training procedure for MT-NLG approaches distributed training differently for each of these cases. Within each individual machine, we use tensor-slicing—a form of model parallelism that splits a single layer into multiple, disjoint “slices” of parameters that are each distributed to a separate GPU—to distribute the training to different GPUs. Then, pipeline parallelism is used to distribute training across different machines or compute nodes. To learn more about these techniques, check out the following links:
+
+Pipeline parallelism [docs][tutorial]
+
+Model parallelism variants (including tensor slicing) [blog]
+
+This hybrid distributed training approach is required because communication is much more expensive when performed across different machines. Because communication between GPUs on the same machine is pretty fast, tensor slicing works well in this case. However, the increased communication time between different machines makes pipeline parallelism a more efficient choice when distributed training across several compute nodes. 
+
+MT-NLG has 105 layers, a hidden dimension of 20K, and 128 attention heads in each layer. The model is trained over a large textual corpus derived using Common Crawl and the Pile dataset [5]. Similar to prior work, a lot of deduplication and matching is performed to remove duplicates and downstream training or testing data from the pre-training corpus.
+
+These filtering procedures are performed because we don’t want to “inflate” the model’s test performance. If testing data from a certain downstream dataset is present within the pre-training corpus, then our model would easily solve this task by simply memorizing the data. But, this doesn’t truly reflect the model’s ability to generalize.
+
+After being pre-trained, MT-NLG is evaluated similarly to GPT-3, using task-agnostic zero, one, and few-shot inference over a large number of different benchmarks; see above. When this massive model is evaluated, we see results that are pretty similar to GPT-3, but slightly better. For example, MT-NLG is slightly better (i.e., <1%) than GPT-3 on language modeling, and similar results are seen on common sense reasoning tasks (i.e., maximum of ~3% improvement across all tasks and shots). 
+
+On word-sense disambiguation, natural language inference, and reading comprehension tasks, MT-NLG improves upon the performance of GPT-3 more significantly. Thus, we see that increasing model scale may benefit certain tasks more than others. For example, MT-NLG is able to improve zero-shot word-sense disambiguation from 0% accuracy with GPT-3 to 48.59%. However, we should keep in mind that the results of MT-NLG still fall short of supervised baselines in all cases. Simply increasing model scale (at least for now) is not enough to reach human-level task-agnostic performance with LLMs.
+
+Overall, the contribution of MT-NLG is mostly engineering focused. MT-NLG improves upon the performance of GPT-3, but not drastically. Training a model of this scale does, however, comes with significant added complexity in terms of training and utilizing the model. Just storing the state of the optimizer for a model of this scale is impossible on a single GPU! As these LLMs become larger and larger, the core concepts that power them stay the same, but the engineering challenge of handling such large models becomes increasingly difficult.
+
+Scaling Language Models: Methods, Analysis, and Insights from Training Gopher [2]
+
+Continuing the trend of training LLMs that are even larger than GPT-3 [7], the authors of [2] simply scale up the number of parameters, dataset size, and amount of compute used for LLM pre-training. They train a number of LLMs with sizes ranging from 44 million to 280 billion parameters. Then, each of these models are compared by analyzing their performance on a massive suite of 152 diverse tasks. This evaluation benchmark, detailed in the figure above, is more comprehensive than prior work (e.g., only ~120 of these tasks had been studied by prior work).
+
+To pre-train their LLMs, the authors construct a new MassiveText corpus, which contains over 2.3 trillion tokens; see the table above.  For comparison, the CommonCrawl-based corpus used to train GPT-3 contained fewer than 500B tokens. Thus, the dataset used for pre-training in [2] is quite larger than any corpus we have seen in prior work.
+
+The exact training strategy used in [2] depends on the size of the LLM being trained, but the authors adopt different combinations of data, model and pipeline parallel training to maximize pre-training throughput. The underlying architecture used for the LLM is identical to GPT-3, aside from the use of relative position encodings and RMSNorm [8] (instead of LayerNorm).
+
+Unlike MT-NLG [1], the results in [2] show us that significant benefits can be derived by using a larger LLM. To enable these performance benefits, however, the larger LLM must be pre-trained over a larger, higher-quality corpus. When the largest of the LLMs in [2]—a 280 billion parameter model called Gopher—is evaluated, we see a performance improvement in 81% of the 152 considered tasks. A more detailed overview of these performance improvements is provided in the figure above. 
+
+On language modeling tasks, the performance of Gopher is similar to that of GPT-3. On other tasks, we can see that the largest improvement in performance occurs on knowledge-intensive tasks, such as reading comprehension and fact checking; see below.
+
+Although Gopher outperforms state-of-the-art baselines for fact checking, we should notice that, for reading comprehension, the few-shot performance of LLMs is again far behind the performance of humans and supervised learning. Simply scaling the model and corpus size is (unfortunately) not enough for foundation models to surpass the performance of task-specific techniques—supervised learning still reigns supreme.  
+
+On tasks that require reasoning (e.g., mathematics, logical reasoning, common sense reasoning, etc.), we see that larger models provide no benefit. In fact, Gopher is even outperformed by prior LLMs (and some of the smaller LLMs that are considered) on such tasks. Compared to knowledge-based tasks, reasoning-intensive tasks seem to benefit much less from model scale.
+
+Authors in [2] extensively study whether Gopher is prone to biased or toxic behavior. Interestingly, such results reveal to us that Gopher often emits toxic text when the prompt provided to the model is itself toxic; see above. Additionally, this effect increases with scale, where larger models respond with greater toxicity to toxic prompts.
+
+Gopher is also biased against certain minorities of social groups, as detailed in the figure below. Despite such findings, however, the authors emphasize that current approaches to assessing LLM bias and fairness are limited. Analyzing and improving the behavior of LLMs relative to existing social norms is an active and popular area of research.
+
+Jurassic-1: Technical Details and Evaluation [3]
+In addition to increasing the size of LLMs like GPT-3, we can consider similarly-sized models with a different shape. For example, researchers in [3] study a 178 billion parameter decoder-only LLM called Jurassic-1. This model is quite similar to GPT-3, but it is slightly larger and has fewer layers (i.e., 76 layers instead of 96). To account for this reduction in layers, the width of each layer (i.e., hidden dimension of each self-attention head) is increased, yielding a similarly-sized model in terms of the number of parameters. 
+
+The modified architecture of Jurassic-1 follows the recommendation of prior work [6] that studies the tradeoff between LLM depth and width. This work examines LLMs of various depths and analyzes performance with respect to model depth and total number of parameters. Interestingly, we see in this analysis that the LLM’s optimal depth changes with its size. Using deeper LLMs only makes sense if the model is sufficiently large, and the optimal depth can be accurately predicted based upon the total number of parameters; see the figure above.
+
+Authors in [3] follow the empirical predictions of [6] in selecting the depth of Jurassic-1; see below for a comparison of this model’s structure to that of GPT-3.
+
+Authors in [3] also explore using multi-word tokens and increase the size of the vocabulary for the underlying tokenizer. This change greatly improves token efficiency, meaning that a given sentence or piece of text can be encoded using fewer tokens. The basic idea here is that reducing the number of input tokens to the model improves its efficiency—we are just processing a shorter input sequence! To learn more about tokenizers, check out the article below.
+
+More on Tokenizers >>> 
+
+Plus, better token efficiency means we can actually provide more in-context examples within our prompt! This is because models like Jurassic-1 and GPT-3 have a maximum context length, or number of tokens you can include in your input. We can fit more data into the same context length if we have better token efficiency. The impact of utilizing more in-context examples is illustrated in the figure below.
+
+Improved token efficiency makes the biggest difference—a 23% improvement—when performing text generation, which requires individually generating each token in a sequential manner. Training and batch inference (i.e., running a forward pass once over a batch of examples) are also sped up 1.5% and 7%, respectively. 
+
+The training procedure for Jurassic-1 matches that of GPT-3 quite closely. Just as we have seen in prior work, the state of the optimizer for training the model (i.e., all model parameters and their relevant statistics to be used in the optimization process) must be split across multiple GPUs and compute nodes, as this state is too large to be stored in a centralized location due to the size of the model.
+
+The model is evaluated using a publicly-available testing suite that is released with the publication. Most of these settings are adopted from the evaluation of GPT-3, and we see within the results—shown above—that Jurassic-1 performs similarly to GPT-3 in most cases. However, authors in [3] mostly consider the zero-shot case for evaluation, claiming that the setup is more simple and deterministic than few-shot evaluation. 
+
+Overall, the major value of this work seems to be in its modification to the underlying tokenizer. We do not seem to get any massive benefit from training a shallow, but wide, model. Although using a larger token vocabulary increases the model’s memory usage (i.e., because we have to store all the parameters for a larger embedding layer), the improved token efficiency is really valuable, as it enables the use of more in-context examples and improves LLM efficiency on several fronts.
+
+Enjoy deep learning? Find current research topics difficult to track or understand? Join the >1.5K subscribers that use Deep (Learning) Focus to better understand AI research by adding your email below!
+
+Type your email...
+Subscribe
+Training Compute-Optimal LLMs [4]
+To maximize an LLM’s performance, prior analysis on scaling trends [9] indicated that we should scale up the size of the model (i.e., the number of non-embedding parameters) as much as possible, while scaling the size of the underlying pre-training dataset somewhat less (by a factor of N^{0.74} in particular, where N is the number of parameters in our model). Such analysis on the behavior of LMs at scale inspired subsequent work like GPT-3, which achieved groundbreaking improvements in task-agnostic, few-shot performance. 
+
+Due to the incredible utility of GPT-3, recent research, such as the work we have seen in this post, has explored even larger LLMs (e.g., up to 530B parameters in MT-NLG!). These models tended to follow the advice of [9]—they use a really large model, but don’t increase the size of the underlying dataset to a similar extent. 
+
+Interestingly, research in [4] finds that this approach to scaling LLMs is sub-optimal. Instead, to train LLMs in a compute-optimal manner (i.e., achieving the maximum performance for a fixed amount of computational cost), we see in [4] that the scale of the LLM and the underlying pre-training corpus should be increased equally. Put simply, this means that, relative to existing work, we should train LLMs over more data; see below.
+
+Intuitively, this approach makes sense, as we saw within the Gopher publication [2] that using a larger pre-training corpus—along with a larger model—yields a more noticeable performance benefit when compared to models like MT-NLG [1] that mostly focus upon model scale.
+
+To make this scaling procedure a bit more specific, [4] considers different sizes of LLMs (i.e., from 70 million to 16 billion parameters) N and the number of tokens used to train them D. Here, we should keep in mind that modern LLMs are trained for <1 epoch (i.e., no single example is seen twice) due to the raw volume of pre-training data. The number of tokens observed during pre-training is equal to the size of the dataset.
+
+By training LLMs with many different combinations of N and D, we can follow an approach similar to [8] by trying to discover a power law that predicts an LLM’s test loss as a function of N and D. In [4], the authors train over 400 LLMs and do just this. From the analysis of these models, we can figure out what combinations of N and D work best for different compute budgets.
+
+Interestingly, we see in these experiments that the optimal approach to training scales the size of the model equally with the number of training tokens. This contradicts prior analysis that suggests the dataset should be scaled less than model size [9]. However, the authors verify these findings through three different methods of analysis that study scaling behavior via different techniques (see Sections 3.1-3.3 in [4]). All of these studies predict that data and model size should be scaled equally; see above.
+
+Overall, these findings tell us that modern LLMs are (i) oversized and (ii) not trained with enough data. For example, the authors in [4] predict that a model with the same number of parameters as Gopher should be trained with >20X more data to be compute optimal. So, if we want to train LLMs properly, we are going to need a lot more data!
+
+“the amount of training data that is projected to be needed is far beyond what is currently used to train large models, and underscores the importance of dataset collection in addition to engineering improvements that allow for model scale.” - from [4]
+
+To validate these findings, the authors train a 70 billion parameter LLM, called Chinchilla. Compared to prior models, Chinchilla is smaller, but it observes much more data during pre-training; see below. The dataset and evaluation strategy is identical to the Gopher publication. 
+In the evaluation of Chinchilla, we see that the model outperforms larger LLMs like Gopher, despite containing 4X fewer parameters! 
+
+The model is evaluated over a large range of tasks and compared to several other modern LLMs; see below. It performs comparably to or better than other state-of-the-art LLMs in all cases, revealing that model scale may not be as important as we originally thought—the size of the pre-training dataset matters a lot too!
+
+takeaways
+With the proposal of GPT-3, we saw that a lot of benefits can be achieved by making LLMs larger. The question that we ask within this overview, however, is whether model scale is the answer to all of our problems. Overall, we have learned that making LLMs larger is not the only necessary component of achieving improved task agnostic performance. Plus, it comes with some downsides. The major takeaways are summarized below.
+
+larger LLMs = more engineering effort. LLMs become increasingly difficult to handle as they grow in size. We have already seen proof of this with GPT-3—training a model with 175 billion parameters required a combination of different distributed training techniques and was a significant feat of engineering. For even larger models, such as MT-NLG, the training process becomes even more complex. Recent efforts have reduced the cost of training LLMs, but the engineering effort required to train and deploy these models is still significant. 
+
+data is important. Scaling up the size of LLMs originally seemed like the go-to approach for achieving better performance. GPT-3 was awesome, why not just make it bigger? Once we saw improvements in performance plateau as models become larger, however, we learned that training over more data is also very important. The largest improvements to LLM performance (e.g., Gopher and Chinchilla [2, 4]) are achieved via a combination of model and dataset scaling (in roughly equal proportion). 
+
+depth or width? This is a bit of a less significant finding, but it seems like current research [6] is telling us that go-to LLM architectures are probably a bit deeper than they need to be. In some cases, it probably makes more sense to make them a bit shallower and invest the saved parameters into the width of each layer. 
+
+supervised performance reigns supreme. Despite all of the incredible task-agnostic performance benefits we have observed with LLMs, we have to put these results in perspective. We saw from the research in this overview that these techniques still fall short of supervised training performance. In a lot of cases, we can still achieve a significant performance benefit via task-specific fine-tuning. Although task-agnostic foundation models are a nice sentiment, it might be a while before we can leverage these models in practical applications without performing any task-specific adaptation. Why not fine-tune a little bit if it makes our performance a lot better?
