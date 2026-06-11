@@ -1,0 +1,31 @@
+[project]
+name = "llm-pretraining"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "datasets==4.8.4",
+    "huggingface-hub[hf-xet]==1.11.0",
+    "jinja2==3.1.6",
+    "matplotlib==3.10.9",
+    "nltk==3.9.4",
+    "requests==2.33.1",
+    "tokenizers==0.22.2",
+    "torch==2.9.0",
+    "torchao==0.17.0",
+    "torchvision==0.24.0",
+    "tqdm==4.67.3",
+    "transformers==5.1.0",
+    "wheel==0.46.3",
+    "zarr==3.1.6",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
