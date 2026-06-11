@@ -32,7 +32,8 @@ Add any necessary lib through `uv add ...`
 
 ## 🏗️ Architecture Design  
 
-The model implements a Decoder-only Transformer framework containing a sparse top-$k$ gating routing layer over multiple Feed-Forward Network (FFN) blocks. It also has option to switch to a Dense network (SwiGLU or GELU). 
+The MoE variant implements a Decoder-only Transformer framework with a sparse top- $k$ gating routing layer over multiple Feed-Forward Network (FFN) blocks, which uses *SwiGLU* activation.  
+The standard GPT variant (*new*) has Dense FeedForward layers and option to switch between SwiGLU and GELU activations.  
 
 
 ```
