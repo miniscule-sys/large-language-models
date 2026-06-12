@@ -2,6 +2,10 @@
 
 This repository contains a clean, self-contained, and documented implementation of a Custom Generative Pre-trained Transformer (GPT) featuring a Sparse Mixture of Experts (MoE) routing layer. Developed initially for research and exploration within Google Colab, this architecture highlights how to implement Multi-Head Self Attention with Dense FeedForward OR Sparse Mixture-of-Experts network.  
 
+***Why this matters***:
+1) This allows anyone to have full control of their AI system, by having visibility over core model architecture and fixing any security vulnerabilities.
+2) It has best performant LLM techniques (MHA, RoPE/YaRN and MoE), which can be used right away on a single GPU, to build custom small LLMs for specialized use cases, with Hallucination detection control.
+
 
 ## 🚀 Key Features  
 * **Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
