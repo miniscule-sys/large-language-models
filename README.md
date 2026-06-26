@@ -15,6 +15,13 @@ This repository contains a clean, self-contained, and documented implementation 
 * Hyperparameter Scaling Configuration: Integrated tuning layout designed to quickly experiment with model sizes, expert counts, and optimization boundaries.  
 
 
+> *This new LLM variation is a combination of GPT-2, Grok and Mistral, where varies techniques were combined from those models.*  
+
+
+*To-Do*: Add **Per-Layer QK-Norm** like Minimax M2.  
+
+
+
 ## Setup  
 
 1. Install `uv`  
