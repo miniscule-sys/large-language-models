@@ -1,0 +1,2072 @@
+Hello and Welcome, people of the world! 
+
+We are accounted poor citizens, the patricians good. What authority surfeits on would relieve us: if they would yield us but the superfluity, while it were wholesome, we might guess they relieved us humanely; but they think we are too dear: the leanness that afflicts us, the object of our misery, is as an inventory to particularise their abundance; our sufferance is a gain to them. Let us revenge this with our pikes, ere we become rakes: for the gods know I speak this in hunger for bread, not in thirst for revenge. 
+
+The cat (Felis catus), also called domestic cat and house cat, is a small carnivorous mammal. It is an obligate carnivore, requiring a predominantly meat-based diet. Its retractable claws are adapted to killing small prey species such as mice and rats. 
+
+Q: How many 's' is there in Strawberry? 
+A: One (1) 
+
+Q: How many 'r' are there in straawberry? 
+A: Three (3) 
+
+Q: How many 'a' are there in Straawberry? 
+A: Two (2) 
+
+Q: How many 'a' are there in apple? 
+A: One (1) 
+
+Q: How many 'a' are there in aapple?
+A: Two (2) 
+
+The archive opened at 06:10 local time. Dust from the upper shelves drifted through the beam of a maintenance lamp while the catalog engine rebuilt its index from fragmented records. Most entries were mundane: shipping manifests, weather observations, maintenance schedules, municipal permits. A smaller subset described experiments that had never been completed. Several folders referenced prototype energy systems designed for isolated settlements in cold regions. The reports were repetitive, technical, and incomplete, but the patterns across them suggested a coordinated program rather than unrelated research efforts.
+
+A freight train crossed the valley every evening at approximately the same time. Residents in the surrounding district adjusted their routines around the sound of the brakes and the vibration along the tracks. The grocery closed fifteen minutes earlier on delivery days, and the mechanic beside the station delayed test drives until after the final cargo transfer. During winter, snow accumulated against the retaining walls near the rail yard and required constant clearing to prevent equipment failure.
+
+The software deployment failed because the staging environment contained outdated dependency versions. Engineers initially assumed the issue originated in the authentication service, but log inspection revealed malformed cache entries produced during a rollback procedure. After recreating the environment from immutable infrastructure templates, the latency spikes disappeared. Monitoring dashboards returned to baseline within twenty minutes of the corrected deployment.
+
+Marine ecosystems near densely populated coastlines often exhibit measurable changes in nutrient concentration, species diversity, and sediment composition. Researchers monitoring tidal zones collect water samples at fixed intervals to establish long-term trends. Variability across seasons complicates interpretation because short-term anomalies may resemble structural ecological shifts. Statistical models therefore incorporate historical baselines and confidence intervals before generating predictive assessments.
+
+The bakery on the corner specialized in rye bread fermented with a culture maintained for more than three decades. New employees learned to adjust hydration levels according to humidity rather than relying strictly on written measurements. Customers typically arrived before sunrise on weekends, forming a queue that extended halfway down the block. By noon, most inventory had been sold and production shifted toward preparation for the following day.
+
+A satellite imaging system operating in low orbit captured multispectral observations of agricultural regions during a prolonged drought period. Analysts compared vegetation indices against previous years and identified clusters of unusually resilient crops. Further investigation showed that farms with diversified irrigation systems experienced lower yield volatility than neighboring operations dependent on a single reservoir source.
+
+The conference proceedings contained contributions from computational linguistics, robotics, distributed systems, and applied mathematics. Several papers focused on low-resource language modeling techniques using synthetic augmentation pipelines. Others examined coordination problems in autonomous vehicle fleets operating under limited communication bandwidth. Attendance exceeded projections after remote participation options were introduced.
+
+Temperature readings from the remote sensor array fluctuated beyond acceptable tolerance margins after midnight. Initial diagnostics suggested battery degradation, but subsequent inspection revealed ice accumulation on exposed connectors. Maintenance crews replaced the shielding material and recalibrated the instruments before reconnecting the telemetry feed. Data continuity was partially restored, although several hours of measurements remained unusable.
+
+Economic forecasts issued during the first quarter underestimated consumer demand for replacement electronics. Retail distributors responded by increasing overseas orders, which strained shipping capacity across multiple ports. Freight costs rose sharply for six consecutive weeks before stabilizing as additional vessels entered circulation. Smaller retailers struggled to compete with larger chains that had negotiated long-term transport contracts earlier in the year.
+
+The manuscript described a fictional republic governed through rotating administrative councils selected by lottery. Citizens viewed the system as imperfect but preferable to hereditary leadership structures that had dominated previous centuries. Public debates occurred in open forums where legal scholars, merchants, and labor representatives argued over taxation, infrastructure, and resource allocation. Historical sections of the text blended mythology with documented events, making precise interpretation difficult.
+
+Machine learning practitioners frequently distinguish between pretraining objectives and downstream task optimization. Large corpora provide broad statistical coverage of syntax, semantics, and factual associations, while supervised fine-tuning introduces narrower behavioral constraints. Data quality issues during pretraining can propagate through later stages of model development, especially when duplicated or automatically generated material dominates the corpus distribution.
+
+The mountain observatory remained operational despite severe weather conditions that damaged access roads throughout the region. Personnel rotated in two-week intervals and relied on satellite communications for logistical coordination. Astronomical measurements collected during winter months were considered especially valuable because atmospheric interference declined substantially at lower temperatures.
+
+A regional health network migrated patient scheduling systems from legacy servers to a cloud-native architecture over an eighteen-month period. Administrators prioritized interoperability with existing medical record standards to reduce operational disruption. Early pilot deployments encountered synchronization problems between clinics using inconsistent timestamp formats. Standardization protocols eventually resolved the discrepancies.
+
+In the manufacturing district, robotic assembly units handled repetitive fastening operations while human technicians supervised calibration and exception handling. Productivity metrics improved after sensor fusion systems were integrated into the quality assurance pipeline. Defect detection accuracy increased significantly for components with reflective surfaces that had previously confused optical inspection systems.
+
+The library preserved newspapers printed during periods of political unrest. Many editions contained conflicting casualty estimates, inconsistent maps, and anonymous editorials written under pseudonyms. Historians cross-referenced these sources with diplomatic cables and census records to reconstruct a more reliable timeline of events. Even then, several episodes remained disputed decades later.
+
+### SAMPLE 1: Python Rate Limiter
+
+User:
+Implement a token bucket rate limiter in Python.
+
+Assistant:
+```python
+import time
+from threading import Lock
+
+
+class TokenBucket:
+    def __init__(self, capacity: int, refill_rate: float):
+        if capacity <= 0:
+            raise ValueError("capacity must be positive")
+
+        if refill_rate <= 0:
+            raise ValueError("refill_rate must be positive")
+
+        self.capacity = capacity
+        self.tokens = capacity
+        self.refill_rate = refill_rate
+        self.last_refill = time.monotonic()
+        self.lock = Lock()
+
+    def _refill(self):
+        now = time.monotonic()
+        elapsed = now - self.last_refill
+
+        new_tokens = elapsed * self.refill_rate
+
+        if new_tokens > 0:
+            self.tokens = min(
+                self.capacity,
+                self.tokens + new_tokens
+            )
+            self.last_refill = now
+
+    def allow_request(self, tokens: int = 1) -> bool:
+        with self.lock:
+            self._refill()
+
+            if self.tokens >= tokens:
+                self.tokens -= tokens
+                return True
+
+            return False
+```
+
+Explanation:
+- Token bucket algorithms permit bursts while enforcing average throughput.
+- The refill step computes newly available capacity using elapsed monotonic time.
+- A lock prevents concurrent state corruption.
+- Complexity is O(1) per request.
+
+---
+
+### SAMPLE 2: SQL Optimization
+
+User:
+Optimize this SQL query for a table with 100 million rows.
+
+```sql
+SELECT *
+FROM orders
+WHERE YEAR(created_at) = 2025;
+```
+
+Assistant:
+Applying a function to an indexed column prevents efficient index usage.
+
+Instead of:
+
+```sql
+WHERE YEAR(created_at) = 2025
+```
+
+use a range predicate:
+
+```sql
+SELECT *
+FROM orders
+WHERE created_at >= '2025-01-01'
+  AND created_at < '2026-01-01';
+```
+
+Why this is faster:
+- Enables index range scans.
+- Avoids full table scans.
+- Reduces CPU overhead from function evaluation.
+
+Recommended index:
+
+```sql
+CREATE INDEX idx_orders_created_at
+ON orders(created_at);
+```
+
+Expected improvement:
+- Full scan complexity approaches O(n).
+- Indexed range scans are substantially more selective and scale better for large datasets.
+
+---
+
+### SAMPLE 3: JavaScript Debounce
+
+User:
+Write a debounce utility in JavaScript.
+
+Assistant:
+```javascript
+function debounce(fn, delay) {
+    let timerId = null;
+
+    return function (...args) {
+        const context = this;
+
+        clearTimeout(timerId);
+
+        timerId = setTimeout(() => {
+            fn.apply(context, args);
+        }, delay);
+    };
+}
+```
+
+Example:
+
+```javascript
+window.addEventListener(
+    "resize",
+    debounce(() => {
+        console.log("resized");
+    }, 300)
+);
+```
+
+Behavior:
+- Multiple rapid calls collapse into one execution.
+- Commonly used for resize, scroll, and search input handlers.
+
+---
+
+### SAMPLE 4: Go Worker Pool
+
+User:
+Implement a worker pool in Go.
+
+Assistant:
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type Job struct {
+	ID int
+}
+
+func worker(id int, jobs <-chan Job, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for job := range jobs {
+		fmt.Printf("worker=%d processing job=%d\n", id, job.ID)
+	}
+}
+
+func main() {
+	const workerCount = 4
+
+	jobs := make(chan Job, 10)
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go worker(i, jobs, &wg)
+	}
+
+	for i := 0; i < 20; i++ {
+		jobs <- Job{ID: i}
+	}
+
+	close(jobs)
+
+	wg.Wait()
+}
+```
+
+Key concepts:
+- Channels coordinate work distribution.
+- Goroutines execute concurrently.
+- WaitGroup synchronizes shutdown.
+
+---
+
+### SAMPLE 5: Binary Search Explanation
+
+User:
+Explain binary search with Python code.
+
+Assistant:
+Binary search requires sorted input and repeatedly halves the search interval.
+
+```python
+def binary_search(nums, target):
+    left = 0
+    right = len(nums) - 1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if nums[mid] == target:
+            return mid
+
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
+```
+
+Complexity:
+- Time: O(log n)
+- Space: O(1)
+
+Example:
+- Searching 1 million sorted items requires approximately 20 comparisons.
+
+---
+
+### SAMPLE 6: Docker Multi-Stage Build
+
+User:
+Reduce Docker image size for a Node.js service.
+
+Assistant:
+Use a multi-stage build.
+
+```dockerfile
+FROM node:20 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+
+RUN npm ci --omit=dev
+
+CMD ["node", "dist/server.js"]
+```
+
+Benefits:
+- Removes build dependencies from final image.
+- Reduces attack surface.
+- Improves deployment speed.
+
+---
+
+### SAMPLE 7: C++ Memory Leak Fix
+
+User:
+Find the bug.
+
+```cpp
+int* buildArray() {
+    int* arr = new int[100];
+    return arr;
+}
+
+int main() {
+    int* data = buildArray();
+}
+```
+
+Assistant:
+The dynamically allocated array is never freed, causing a memory leak.
+
+Corrected version:
+
+```cpp
+#include <memory>
+
+std::unique_ptr<int[]> buildArray() {
+    return std::make_unique<int[]>(100);
+}
+
+int main() {
+    auto data = buildArray();
+}
+```
+
+Why this is better:
+- Uses RAII.
+- Prevents forgotten delete[] calls.
+- Exception-safe ownership semantics.
+
+---
+
+### SAMPLE 8: Redis Caching Strategy
+
+User:
+How should I cache database queries with Redis?
+
+Assistant:
+A common approach is cache-aside.
+
+Flow:
+1. Application checks Redis.
+2. If cache miss:
+   - query database
+   - store result in Redis
+3. Return data.
+
+Pseudo-code:
+
+```python
+def get_user(user_id):
+    cache_key = f"user:{user_id}"
+
+    cached = redis.get(cache_key)
+
+    if cached:
+        return deserialize(cached)
+
+    user = db.fetch_user(user_id)
+
+    redis.setex(
+        cache_key,
+        300,
+        serialize(user)
+    )
+
+    return user
+```
+
+Important considerations:
+- TTL expiration
+- Cache invalidation
+- Serialization overhead
+- Hot-key mitigation
+- Consistency guarantees
+
+---
+
+### SAMPLE 9: Rust Ownership
+
+User:
+Explain ownership in Rust.
+
+Assistant:
+Rust ownership enforces memory safety without garbage collection.
+
+Core rules:
+1. Each value has one owner.
+2. Ownership can move.
+3. When the owner goes out of scope, the value is dropped.
+
+Example:
+
+```rust
+fn main() {
+    let s1 = String::from("hello");
+
+    let s2 = s1;
+
+    // println!("{}", s1); // invalid
+    println!("{}", s2);
+}
+```
+
+Why:
+- Ownership moved from s1 to s2.
+- Prevents use-after-free bugs.
+
+Borrowing:
+
+```rust
+fn print_len(s: &String) {
+    println!("{}", s.len());
+}
+```
+
+References allow access without ownership transfer.
+
+---
+
+### SAMPLE 10: API Retry Logic
+
+User:
+Implement exponential backoff retry logic in Python.
+
+Assistant:
+```python
+import random
+import time
+
+
+def retry(operation, retries=5, base_delay=0.5):
+    for attempt in range(retries):
+        try:
+            return operation()
+
+        except Exception:
+            if attempt == retries - 1:
+                raise
+
+            delay = (
+                base_delay *
+                (2 ** attempt)
+            )
+
+            jitter = random.uniform(0, 0.1)
+
+            time.sleep(delay + jitter)
+```
+
+Properties:
+- Reduces retry storms.
+- Jitter prevents synchronized retries.
+- Common in distributed systems and API clients.
+
+
+# Article # 
+
+To train an LM, we must first obtain a large amount of unlabeled text. Then, we can perform self-supervised learning by iterating over the following steps:
+
+* Sample some text
+* Try to predict the next word
+* Update your model based on the “correct” next word
+
+This process, referred to as language model pre-training, is illustrated within the figure above. Interestingly, this training procedure allows the (L)LM to learn from a large amount of data, as the textual data from which we are learning requires no human annotations! We can just download a lot of raw textual data from the internet and use it for pre-training. Learning from such a large corpus is incredibly beneficial to developing a diverse, comprehensive understanding of language.
+
+creating foundation models. If we pre-train an LLM (which, by the way, is an expensive process), we get access to a neural network that, given some text, can accurately predict the next word. Initially, this might not seem that useful, but these LLMs have an incredible foundation of knowledge in natural language.
+
+To understand why this is the case, we need to first recognize that predicting the next word in a sequence of text is a difficult problem—even doing this as a human is not trivial! Accurately choosing this next word actually requires the model to develop an in-depth, nuanced understanding of language. This understanding is incredibly beneficial, as it can be repurposed for solving other types of linguistic tasks!
+
+In other words, these LLMs are a type of foundation model—a generic term referring to large neural networks that can be repurposed to solve a wide variety of tasks. The learning process for these foundation models proceeds in two-phases: pre-training and in-context learning. The pre-training procedure is described above, while in-context learning refers to the process of using the generic LLM to solve a more specific, downstream task.
+
+wait… how do we do this? There are many ways we can repurpose LLMs to solving downstream tasks. Currently, a lot of the research studies zero and few-shot inference techniques for solving various tasks with LLMs. At a high level, these techniques solve a downstream task by reframing it as a next-word prediction problem. For example, we can pass the following prompts to an LLM:
+
+“Summarize the following document: <document> ⇒” 
+
+“Translate this sentence into french: <sentence> ⇒”
+
+Then, using next-word prediction, we can generate a textual response to this prompt that (ideally) should answer our desired question. We solve the task by just prompting/asking the LLM to solve the task for us! The above prompts are examples of zero-shot learning. We could also perform few-shot learning, in which we additionally provide several examples of correct outputs within our prompt; see below for an example.
+
+Few-shot learning with LLMs was popularized by GPT-3 [7], which showed that language models of a certain scale perform relatively well using such techniques. However, this performance still lags behind baseline techniques that solve downstream tasks via supervised learning or fine-tuning.
+
+Instead of performing few-shot inference, we could just fine-tune (i.e., update the model’s parameters based on training over pairs of input and desired output) the LLM; see the figure above. This approach performs quite well, but it does have some drawbacks:
+
+Further training is required (may be expensive)
+
+A specialized model is required for each downstream task
+
+It would be great to solve all tasks accurately with a single model. In fact, this is the ultimate goal of foundation models. For now, however, it seems like fine-tuning might be necessary to achieve the best performance. Nonetheless, we will see in this overview that most current research measures LLM performance using zero/few-shot inference.
+
+this overview
+By now, hopefully the concept of LLMs and how they work is somewhat clear. Within this overview, we will focus on (i) training larger LLMs and (ii) using larger datasets for pre-training. Modern LLMs are based upon decoder-only transformer architectures. The size of these models can be increased by either adding more layers or increasing the width of each layer. To obtain more data to train these models, we typically just scrape text from the web using tools like Common Crawl or use large sources of textual data like the Pile dataset [5].
+
+We will study four papers that explore modern LLMs and attempt to improve upon the results of GPT-3. Initial attempts of training larger models fall somewhat short of the expectations set by GPT-3—the performance improvements we get aren’t as good as we would hope. Later work finds that there is more to making LLMs successful than simply making them larger—we also have to improve the size and quality of the pre-training corpus. This leads to the proposal of more efficient LLMs that achieve remarkable results by training smaller models over more data. Let’s take a look!
+
+Enjoy deep learning? Find current research topics difficult to track or understand? Join the >1.5K subscribers that use Deep (Learning) Focus to better understand AI research by adding your email below!
+
+Type your email...
+Subscribe
+Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model [1]
+Although LLMs were already pretty large (e.g., GPT-3 [7] contains 175 billion parameters), MT-NLG 530B, proposed in [1], took this to a new level. A collaboration between Nvidia and Microsoft, this work trained an LLM with 530 billion parameters. Models like GPT-3 were already hard to train due to their size, so training MT-NLG 530B—another decoder-only transformer with >3X more parameters as shown in the figure below—was obviously quite difficult. In fact, MT-NLG required a dedicated compute cluster and several distributed training innovations to make the training tractable and efficient.
+
+The model is trained using a combination of data, model/pipeline, and tensor parallelism; see here for a quick discussion of these concepts. The proposed distributed training methodology, which is based upon the Megatron-LM library, is the main contribution of this work—simply engineering a system capable of training an LLM with 530 billion parameters is incredibly non-trivial.
+
+When we perform distributed training, there are two basic ways we can add more GPUs to the training process:
+
+Add more GPUs to your machine
+
+Add more machines, each of which have GPUs
+
+The training procedure for MT-NLG approaches distributed training differently for each of these cases. Within each individual machine, we use tensor-slicing—a form of model parallelism that splits a single layer into multiple, disjoint “slices” of parameters that are each distributed to a separate GPU—to distribute the training to different GPUs. Then, pipeline parallelism is used to distribute training across different machines or compute nodes. To learn more about these techniques, check out the following links:
+
+Pipeline parallelism [docs][tutorial]
+
+Model parallelism variants (including tensor slicing) [blog]
+
+This hybrid distributed training approach is required because communication is much more expensive when performed across different machines. Because communication between GPUs on the same machine is pretty fast, tensor slicing works well in this case. However, the increased communication time between different machines makes pipeline parallelism a more efficient choice when distributed training across several compute nodes. 
+
+MT-NLG has 105 layers, a hidden dimension of 20K, and 128 attention heads in each layer. The model is trained over a large textual corpus derived using Common Crawl and the Pile dataset [5]. Similar to prior work, a lot of deduplication and matching is performed to remove duplicates and downstream training or testing data from the pre-training corpus.
+
+These filtering procedures are performed because we don’t want to “inflate” the model’s test performance. If testing data from a certain downstream dataset is present within the pre-training corpus, then our model would easily solve this task by simply memorizing the data. But, this doesn’t truly reflect the model’s ability to generalize.
+
+After being pre-trained, MT-NLG is evaluated similarly to GPT-3, using task-agnostic zero, one, and few-shot inference over a large number of different benchmarks; see above. When this massive model is evaluated, we see results that are pretty similar to GPT-3, but slightly better. For example, MT-NLG is slightly better (i.e., <1%) than GPT-3 on language modeling, and similar results are seen on common sense reasoning tasks (i.e., maximum of ~3% improvement across all tasks and shots). 
+
+On word-sense disambiguation, natural language inference, and reading comprehension tasks, MT-NLG improves upon the performance of GPT-3 more significantly. Thus, we see that increasing model scale may benefit certain tasks more than others. For example, MT-NLG is able to improve zero-shot word-sense disambiguation from 0% accuracy with GPT-3 to 48.59%. However, we should keep in mind that the results of MT-NLG still fall short of supervised baselines in all cases. Simply increasing model scale (at least for now) is not enough to reach human-level task-agnostic performance with LLMs.
+
+Overall, the contribution of MT-NLG is mostly engineering focused. MT-NLG improves upon the performance of GPT-3, but not drastically. Training a model of this scale does, however, comes with significant added complexity in terms of training and utilizing the model. Just storing the state of the optimizer for a model of this scale is impossible on a single GPU! As these LLMs become larger and larger, the core concepts that power them stay the same, but the engineering challenge of handling such large models becomes increasingly difficult.
+
+Scaling Language Models: Methods, Analysis, and Insights from Training Gopher [2]
+
+Continuing the trend of training LLMs that are even larger than GPT-3 [7], the authors of [2] simply scale up the number of parameters, dataset size, and amount of compute used for LLM pre-training. They train a number of LLMs with sizes ranging from 44 million to 280 billion parameters. Then, each of these models are compared by analyzing their performance on a massive suite of 152 diverse tasks. This evaluation benchmark, detailed in the figure above, is more comprehensive than prior work (e.g., only ~120 of these tasks had been studied by prior work).
+
+To pre-train their LLMs, the authors construct a new MassiveText corpus, which contains over 2.3 trillion tokens; see the table above.  For comparison, the CommonCrawl-based corpus used to train GPT-3 contained fewer than 500B tokens. Thus, the dataset used for pre-training in [2] is quite larger than any corpus we have seen in prior work.
+
+The exact training strategy used in [2] depends on the size of the LLM being trained, but the authors adopt different combinations of data, model and pipeline parallel training to maximize pre-training throughput. The underlying architecture used for the LLM is identical to GPT-3, aside from the use of relative position encodings and RMSNorm [8] (instead of LayerNorm).
+
+Unlike MT-NLG [1], the results in [2] show us that significant benefits can be derived by using a larger LLM. To enable these performance benefits, however, the larger LLM must be pre-trained over a larger, higher-quality corpus. When the largest of the LLMs in [2]—a 280 billion parameter model called Gopher—is evaluated, we see a performance improvement in 81% of the 152 considered tasks. A more detailed overview of these performance improvements is provided in the figure above. 
+
+On language modeling tasks, the performance of Gopher is similar to that of GPT-3. On other tasks, we can see that the largest improvement in performance occurs on knowledge-intensive tasks, such as reading comprehension and fact checking; see below.
+
+Although Gopher outperforms state-of-the-art baselines for fact checking, we should notice that, for reading comprehension, the few-shot performance of LLMs is again far behind the performance of humans and supervised learning. Simply scaling the model and corpus size is (unfortunately) not enough for foundation models to surpass the performance of task-specific techniques—supervised learning still reigns supreme.  
+
+On tasks that require reasoning (e.g., mathematics, logical reasoning, common sense reasoning, etc.), we see that larger models provide no benefit. In fact, Gopher is even outperformed by prior LLMs (and some of the smaller LLMs that are considered) on such tasks. Compared to knowledge-based tasks, reasoning-intensive tasks seem to benefit much less from model scale.
+
+Authors in [2] extensively study whether Gopher is prone to biased or toxic behavior. Interestingly, such results reveal to us that Gopher often emits toxic text when the prompt provided to the model is itself toxic; see above. Additionally, this effect increases with scale, where larger models respond with greater toxicity to toxic prompts.
+
+Gopher is also biased against certain minorities of social groups, as detailed in the figure below. Despite such findings, however, the authors emphasize that current approaches to assessing LLM bias and fairness are limited. Analyzing and improving the behavior of LLMs relative to existing social norms is an active and popular area of research.
+
+Jurassic-1: Technical Details and Evaluation [3]
+In addition to increasing the size of LLMs like GPT-3, we can consider similarly-sized models with a different shape. For example, researchers in [3] study a 178 billion parameter decoder-only LLM called Jurassic-1. This model is quite similar to GPT-3, but it is slightly larger and has fewer layers (i.e., 76 layers instead of 96). To account for this reduction in layers, the width of each layer (i.e., hidden dimension of each self-attention head) is increased, yielding a similarly-sized model in terms of the number of parameters. 
+
+The modified architecture of Jurassic-1 follows the recommendation of prior work [6] that studies the tradeoff between LLM depth and width. This work examines LLMs of various depths and analyzes performance with respect to model depth and total number of parameters. Interestingly, we see in this analysis that the LLM’s optimal depth changes with its size. Using deeper LLMs only makes sense if the model is sufficiently large, and the optimal depth can be accurately predicted based upon the total number of parameters; see the figure above.
+
+Authors in [3] follow the empirical predictions of [6] in selecting the depth of Jurassic-1; see below for a comparison of this model’s structure to that of GPT-3.
+
+Authors in [3] also explore using multi-word tokens and increase the size of the vocabulary for the underlying tokenizer. This change greatly improves token efficiency, meaning that a given sentence or piece of text can be encoded using fewer tokens. The basic idea here is that reducing the number of input tokens to the model improves its efficiency—we are just processing a shorter input sequence! To learn more about tokenizers, check out the article below.
+
+More on Tokenizers >>> 
+
+Plus, better token efficiency means we can actually provide more in-context examples within our prompt! This is because models like Jurassic-1 and GPT-3 have a maximum context length, or number of tokens you can include in your input. We can fit more data into the same context length if we have better token efficiency. The impact of utilizing more in-context examples is illustrated in the figure below.
+
+Improved token efficiency makes the biggest difference—a 23% improvement—when performing text generation, which requires individually generating each token in a sequential manner. Training and batch inference (i.e., running a forward pass once over a batch of examples) are also sped up 1.5% and 7%, respectively. 
+
+The training procedure for Jurassic-1 matches that of GPT-3 quite closely. Just as we have seen in prior work, the state of the optimizer for training the model (i.e., all model parameters and their relevant statistics to be used in the optimization process) must be split across multiple GPUs and compute nodes, as this state is too large to be stored in a centralized location due to the size of the model.
+
+The model is evaluated using a publicly-available testing suite that is released with the publication. Most of these settings are adopted from the evaluation of GPT-3, and we see within the results—shown above—that Jurassic-1 performs similarly to GPT-3 in most cases. However, authors in [3] mostly consider the zero-shot case for evaluation, claiming that the setup is more simple and deterministic than few-shot evaluation. 
+
+Overall, the major value of this work seems to be in its modification to the underlying tokenizer. We do not seem to get any massive benefit from training a shallow, but wide, model. Although using a larger token vocabulary increases the model’s memory usage (i.e., because we have to store all the parameters for a larger embedding layer), the improved token efficiency is really valuable, as it enables the use of more in-context examples and improves LLM efficiency on several fronts.
+
+Enjoy deep learning? Find current research topics difficult to track or understand? Join the >1.5K subscribers that use Deep (Learning) Focus to better understand AI research by adding your email below!
+
+Type your email...
+Subscribe
+Training Compute-Optimal LLMs [4]
+To maximize an LLM’s performance, prior analysis on scaling trends [9] indicated that we should scale up the size of the model (i.e., the number of non-embedding parameters) as much as possible, while scaling the size of the underlying pre-training dataset somewhat less (by a factor of N^{0.74} in particular, where N is the number of parameters in our model). Such analysis on the behavior of LMs at scale inspired subsequent work like GPT-3, which achieved groundbreaking improvements in task-agnostic, few-shot performance. 
+
+Due to the incredible utility of GPT-3, recent research, such as the work we have seen in this post, has explored even larger LLMs (e.g., up to 530B parameters in MT-NLG!). These models tended to follow the advice of [9]—they use a really large model, but don’t increase the size of the underlying dataset to a similar extent. 
+
+Interestingly, research in [4] finds that this approach to scaling LLMs is sub-optimal. Instead, to train LLMs in a compute-optimal manner (i.e., achieving the maximum performance for a fixed amount of computational cost), we see in [4] that the scale of the LLM and the underlying pre-training corpus should be increased equally. Put simply, this means that, relative to existing work, we should train LLMs over more data; see below.
+
+Intuitively, this approach makes sense, as we saw within the Gopher publication [2] that using a larger pre-training corpus—along with a larger model—yields a more noticeable performance benefit when compared to models like MT-NLG [1] that mostly focus upon model scale.
+
+To make this scaling procedure a bit more specific, [4] considers different sizes of LLMs (i.e., from 70 million to 16 billion parameters) N and the number of tokens used to train them D. Here, we should keep in mind that modern LLMs are trained for <1 epoch (i.e., no single example is seen twice) due to the raw volume of pre-training data. The number of tokens observed during pre-training is equal to the size of the dataset.
+
+By training LLMs with many different combinations of N and D, we can follow an approach similar to [8] by trying to discover a power law that predicts an LLM’s test loss as a function of N and D. In [4], the authors train over 400 LLMs and do just this. From the analysis of these models, we can figure out what combinations of N and D work best for different compute budgets.
+
+Interestingly, we see in these experiments that the optimal approach to training scales the size of the model equally with the number of training tokens. This contradicts prior analysis that suggests the dataset should be scaled less than model size [9]. However, the authors verify these findings through three different methods of analysis that study scaling behavior via different techniques (see Sections 3.1-3.3 in [4]). All of these studies predict that data and model size should be scaled equally; see above.
+
+Overall, these findings tell us that modern LLMs are (i) oversized and (ii) not trained with enough data. For example, the authors in [4] predict that a model with the same number of parameters as Gopher should be trained with >20X more data to be compute optimal. So, if we want to train LLMs properly, we are going to need a lot more data!
+
+“the amount of training data that is projected to be needed is far beyond what is currently used to train large models, and underscores the importance of dataset collection in addition to engineering improvements that allow for model scale.” - from [4]
+
+To validate these findings, the authors train a 70 billion parameter LLM, called Chinchilla. Compared to prior models, Chinchilla is smaller, but it observes much more data during pre-training; see below. The dataset and evaluation strategy is identical to the Gopher publication. 
+In the evaluation of Chinchilla, we see that the model outperforms larger LLMs like Gopher, despite containing 4X fewer parameters! 
+
+The model is evaluated over a large range of tasks and compared to several other modern LLMs; see below. It performs comparably to or better than other state-of-the-art LLMs in all cases, revealing that model scale may not be as important as we originally thought—the size of the pre-training dataset matters a lot too!
+
+takeaways
+With the proposal of GPT-3, we saw that a lot of benefits can be achieved by making LLMs larger. The question that we ask within this overview, however, is whether model scale is the answer to all of our problems. Overall, we have learned that making LLMs larger is not the only necessary component of achieving improved task agnostic performance. Plus, it comes with some downsides. The major takeaways are summarized below.
+
+larger LLMs = more engineering effort. LLMs become increasingly difficult to handle as they grow in size. We have already seen proof of this with GPT-3—training a model with 175 billion parameters required a combination of different distributed training techniques and was a significant feat of engineering. For even larger models, such as MT-NLG, the training process becomes even more complex. Recent efforts have reduced the cost of training LLMs, but the engineering effort required to train and deploy these models is still significant. 
+
+data is important. Scaling up the size of LLMs originally seemed like the go-to approach for achieving better performance. GPT-3 was awesome, why not just make it bigger? Once we saw improvements in performance plateau as models become larger, however, we learned that training over more data is also very important. The largest improvements to LLM performance (e.g., Gopher and Chinchilla [2, 4]) are achieved via a combination of model and dataset scaling (in roughly equal proportion). 
+
+depth or width? This is a bit of a less significant finding, but it seems like current research [6] is telling us that go-to LLM architectures are probably a bit deeper than they need to be. In some cases, it probably makes more sense to make them a bit shallower and invest the saved parameters into the width of each layer. 
+
+supervised performance reigns supreme. Despite all of the incredible task-agnostic performance benefits we have observed with LLMs, we have to put these results in perspective. We saw from the research in this overview that these techniques still fall short of supervised training performance. In a lot of cases, we can still achieve a significant performance benefit via task-specific fine-tuning. Although task-agnostic foundation models are a nice sentiment, it might be a while before we can leverage these models in practical applications without performing any task-specific adaptation. Why not fine-tune a little bit if it makes our performance a lot better? 
+
+============= 
+
+Simple Math Pretraining Q&A => 
+
+Q: Compute 99 - 195.
+A: -96
+
+Q: Solve x + -4 = -13.
+A: x = -9
+
+Q: Differentiate x^3.
+A: 3x^2
+
+Q: Integrate 2x dx.
+A: x^2 + C
+
+Q: Compute 131 - 125.
+A: 6
+
+Q: Compute 78 - 123.
+A: -45
+
+Q: Compute 150 * 56.
+A: 8400
+
+Q: Compute 36 + 73.
+A: 109
+
+Q: Compute 194 * 25.
+A: 4850
+
+Q: Compute 65 * 137.
+A: 8905
+
+Q: Compute 155 - 38.
+A: 117
+
+Q: Compute 26 + 187.
+A: 213
+
+Q: Compute 176 - 85.
+A: 91
+
+Q: Compute 144 - 26.
+A: 118
+
+Q: Compute 112 * 81.
+A: 9072
+
+Q: Compute 164 * 53.
+A: 8692
+
+Q: Compute 123 * 114.
+A: 14022
+
+Q: Compute 67 * 16.
+A: 1072
+
+Q: Compute 4 * 24.
+A: 96
+
+Q: Compute 103 * 182.
+A: 18746
+
+Q: Compute 161 * 1.
+A: 161
+
+Q: Compute 127 + 86.
+A: 213
+
+Q: Compute 187 * 84.
+A: 15708
+
+Q: Compute 17 * 49.
+A: 833
+
+Q: Solve x + -5 = -8.
+A: x = -3
+
+Q: Differentiate x^3.
+A: 3x^2
+
+Q: Integrate 2x dx.
+A: x^2 + C
+
+Q: State the Pythagorean theorem.
+A: In a right triangle, a^2 + b^2 = c^2.
+
+Q: Compute 37 - 140.
+A: -103
+
+Q: Compute 24 - 21.
+A: 3
+
+Q: Compute 131 + 126.
+A: 257
+
+Q: Compute 78 - 142.
+A: -64
+
+Q: Compute 181 * 32.
+A: 5792
+
+Q: Compute 86 + 139.
+A: 225
+
+Q: Compute 155 * 141.
+A: 21855
+
+Q: Compute 74 + 114.
+A: 188
+
+Q: Compute 153 - 99.
+A: 54
+
+Q: Compute 148 - 62.
+A: 86
+
+Q: Compute 48 + 49.
+A: 97
+
+Q: Compute 9 * 157.
+A: 1413
+
+Q: Compute 67 + 122.
+A: 189
+
+Q: Compute 23 + 174.
+A: 197
+
+Q: Compute 39 + 10.
+A: 49
+
+Q: Compute 180 * 139.
+A: 25020
+
+Q: Compute 101 * 181.
+A: 18281
+
+Q: Compute 71 + 134.
+A: 205
+
+Q: Compute 56 * 174.
+A: 9744
+
+Q: Compute 108 - 149.
+A: -41
+
+Q: Solve x + 11 = 15.
+A: x = 4
+
+Q: Differentiate x^3.
+A: 3x^2
+
+Q: Integrate 2x dx.
+A: x^2 + C
+
+Q: Compute 170 * 165.
+A: 28050
+
+Q: Compute 92 - 22.
+A: 70
+
+Q: Compute 157 - 30.
+A: 127
+
+Q: Compute 151 - 162.
+A: -11
+
+Q: Compute 49 + 63.
+A: 112
+
+Q: Compute 188 + 70.
+A: 258
+
+Q: Compute 181 - 57.
+A: 124
+
+Q: Compute 44 - 86.
+A: -42
+
+Q: Compute 16 + 26.
+A: 42
+
+Q: Compute 179 + 57.
+A: 236
+
+Q: Compute 147 * 163.
+A: 23961
+
+Q: Compute 155 + 175.
+A: 330
+
+Q: Compute 7 * 32.
+A: 224
+
+Q: Compute 49 * 156.
+A: 7644
+
+Q: Compute 31 + 101.
+A: 132
+
+Q: Compute 95 + 30.
+A: 125
+
+Q: Compute 156 + 6.
+A: 162
+
+Q: Compute 48 + 184.
+A: 232
+
+Q: Compute 123 * 54.
+A: 6642
+
+Q: Compute 16 + 174.
+A: 190
+
+Q: Solve x + 7 = 14.
+A: x = 7
+
+Q: Differentiate x^3.
+A: 3x^2
+
+Q: Integrate 2x dx.
+A: x^2 + C
+
+Q: State the Pythagorean theorem.
+A: In a right triangle, a^2 + b^2 = c^2.
+
+Synthetic Math Problems (500) => 
+
+Problem 1
+Question: The sum of two consecutive odd integers is 330. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 2
+Question: A factory produced 381 items. 27% passed inspection on the first try. Of the remaining items, 41 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 143
+
+Problem 3
+Question: A bag has 10 red and 9 blue balls. What is the probability that one draw is red?
+Answer: 10/19
+
+Problem 4
+Question: The sum of two consecutive odd integers is 88. Find the larger integer.
+Answer: 45
+
+Problem 5
+Question: A bag has 3 red and 9 blue balls. What is the probability that one draw is red?
+Answer: 3/12
+
+Problem 6
+Question: A bag has 3 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 3/13
+
+Problem 7
+Question: A rectangle has length 22 and width 23. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 502
+
+Problem 8
+Question: A rectangle has length 9 and width 5. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 41
+
+Problem 9
+Question: Solve for x: 2x + 4 = 65.
+Answer: x = 30.5
+
+Problem 10
+Question: A bag has 3 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 3/9
+
+Problem 11
+Question: A bag has 10 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 10/16
+
+Problem 12
+Question: A rectangle has length 22 and width 12. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 239
+
+Problem 13
+Question: A rectangle has length 9 and width 18. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 158
+
+Problem 14
+Question: The sum of two consecutive odd integers is 362. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 15
+Question: A rectangle has length 15 and width 15. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 200
+
+Problem 16
+Question: Solve for x: 12x + -8 = 87.
+Answer: x = 7.916666666666667
+
+Problem 17
+Question: A rectangle has length 39 and width 21. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 794
+
+Problem 18
+Question: Solve for x: 2x + 10 = 72.
+Answer: x = 31.0
+
+Problem 19
+Question: A bag has 9 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 9/14
+
+Problem 20
+Question: A rectangle has length 31 and width 7. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 192
+
+Problem 21
+Question: Solve for x: 3x + -10 = 143.
+Answer: x = 51.0
+
+Problem 22
+Question: A bag has 8 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 8/18
+
+Problem 23
+Question: A factory produced 600 items. 22% passed inspection on the first try. Of the remaining items, 29 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 161
+
+Problem 24
+Question: Solve for x: 11x + 17 = 110.
+Answer: x = 8.454545454545455
+
+Problem 25
+Question: The sum of two consecutive odd integers is 126. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 26
+Question: Solve for x: 5x + -20 = 61.
+Answer: x = 16.2
+
+Problem 27
+Question: Solve for x: 10x + -6 = 113.
+Answer: x = 11.9
+
+Problem 28
+Question: Solve for x: 7x + 16 = 100.
+Answer: x = 12.0
+
+Problem 29
+Question: A bag has 7 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 7/10
+
+Problem 30
+Question: A bag has 5 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 5/11
+
+Problem 31
+Question: A bag has 3 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 3/13
+
+Problem 32
+Question: A rectangle has length 20 and width 21. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 395
+
+Problem 33
+Question: A bag has 8 red and 9 blue balls. What is the probability that one draw is red?
+Answer: 8/17
+
+Problem 34
+Question: A rectangle has length 8 and width 22. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 160
+
+Problem 35
+Question: A bag has 3 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 3/9
+
+Problem 36
+Question: The sum of two consecutive odd integers is 320. Find the larger integer.
+Answer: 161
+
+Problem 37
+Question: Solve for x: 4x + -15 = 75.
+Answer: x = 22.5
+
+Problem 38
+Question: A factory produced 809 items. 24% passed inspection on the first try. Of the remaining items, 15 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 209
+
+Problem 39
+Question: A factory produced 583 items. 20% passed inspection on the first try. Of the remaining items, 27 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 143
+
+Problem 40
+Question: The sum of two consecutive odd integers is 176. Find the larger integer.
+Answer: 89
+
+Problem 41
+Question: A factory produced 759 items. 31% passed inspection on the first try. Of the remaining items, 32 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 267
+
+Problem 42
+Question: A rectangle has length 12 and width 10. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 111
+
+Problem 43
+Question: A rectangle has length 18 and width 13. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 218
+
+Problem 44
+Question: A bag has 8 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 8/18
+
+Problem 45
+Question: A bag has 4 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 4/7
+
+Problem 46
+Question: A rectangle has length 32 and width 15. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 455
+
+Problem 47
+Question: The sum of two consecutive odd integers is 172. Find the larger integer.
+Answer: 87
+
+Problem 48
+Question: A factory produced 379 items. 52% passed inspection on the first try. Of the remaining items, 23 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 220
+
+Problem 49
+Question: Solve for x: 8x + -19 = 67.
+Answer: x = 10.75
+
+Problem 50
+Question: A factory produced 526 items. 29% passed inspection on the first try. Of the remaining items, 12 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 164
+
+Problem 51
+Question: The sum of two consecutive odd integers is 268. Find the larger integer.
+Answer: 135
+
+Problem 52
+Question: Solve for x: 12x + 7 = 149.
+Answer: x = 11.833333333333334
+
+Problem 53
+Question: The sum of two consecutive odd integers is 362. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 54
+Question: Solve for x: 9x + -6 = 144.
+Answer: x = 16.666666666666668
+
+Problem 55
+Question: A factory produced 524 items. 56% passed inspection on the first try. Of the remaining items, 30 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 323
+
+Problem 56
+Question: A bag has 3 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 3/10
+
+Problem 57
+Question: The sum of two consecutive odd integers is 148. Find the larger integer.
+Answer: 75
+
+Problem 58
+Question: A factory produced 433 items. 24% passed inspection on the first try. Of the remaining items, 14 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 117
+
+Problem 59
+Question: A rectangle has length 27 and width 10. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 245
+
+Problem 60
+Question: Solve for x: 6x + -12 = 12.
+Answer: x = 4.0
+
+Problem 61
+Question: Solve for x: 2x + 17 = 65.
+Answer: x = 24.0
+
+Problem 62
+Question: Solve for x: 9x + -10 = 140.
+Answer: x = 16.666666666666668
+
+Problem 63
+Question: A factory produced 507 items. 32% passed inspection on the first try. Of the remaining items, 32 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 194
+
+Problem 64
+Question: A factory produced 330 items. 56% passed inspection on the first try. Of the remaining items, 37 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 221
+
+Problem 65
+Question: Solve for x: 5x + 11 = 36.
+Answer: x = 5.0
+
+Problem 66
+Question: A bag has 7 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 7/17
+
+Problem 67
+Question: A factory produced 453 items. 59% passed inspection on the first try. Of the remaining items, 35 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 302
+
+Problem 68
+Question: A rectangle has length 9 and width 10. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 81
+
+Problem 69
+Question: A rectangle has length 16 and width 15. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 215
+
+Problem 70
+Question: The sum of two consecutive odd integers is 176. Find the larger integer.
+Answer: 89
+
+Problem 71
+Question: A factory produced 508 items. 55% passed inspection on the first try. Of the remaining items, 32 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 311
+
+Problem 72
+Question: Solve for x: 9x + 14 = 70.
+Answer: x = 6.222222222222222
+
+Problem 73
+Question: A factory produced 862 items. 22% passed inspection on the first try. Of the remaining items, 15 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 204
+
+Problem 74
+Question: The sum of two consecutive odd integers is 126. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 75
+Question: The sum of two consecutive odd integers is 314. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 76
+Question: The sum of two consecutive odd integers is 176. Find the larger integer.
+Answer: 89
+
+Problem 77
+Question: A rectangle has length 40 and width 13. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 504
+
+Problem 78
+Question: A rectangle has length 29 and width 8. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 216
+
+Problem 79
+Question: The sum of two consecutive odd integers is 348. Find the larger integer.
+Answer: 175
+
+Problem 80
+Question: A bag has 5 red and 4 blue balls. What is the probability that one draw is red?
+Answer: 5/9
+
+Problem 81
+Question: A rectangle has length 10 and width 18. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 176
+
+Problem 82
+Question: A bag has 5 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 5/10
+
+Problem 83
+Question: A rectangle has length 15 and width 24. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 335
+
+Problem 84
+Question: A factory produced 704 items. 55% passed inspection on the first try. Of the remaining items, 24 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 411
+
+Problem 85
+Question: Solve for x: 3x + -3 = 103.
+Answer: x = 35.333333333333336
+
+Problem 86
+Question: A rectangle has length 15 and width 19. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 269
+
+Problem 87
+Question: A factory produced 166 items. 38% passed inspection on the first try. Of the remaining items, 10 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 73
+
+Problem 88
+Question: Solve for x: 12x + -20 = 33.
+Answer: x = 4.416666666666667
+
+Problem 89
+Question: A bag has 4 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 4/7
+
+Problem 90
+Question: The sum of two consecutive odd integers is 162. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 91
+Question: Solve for x: 8x + -10 = 39.
+Answer: x = 6.125
+
+Problem 92
+Question: A bag has 5 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 5/11
+
+Problem 93
+Question: The sum of two consecutive odd integers is 92. Find the larger integer.
+Answer: 47
+
+Problem 94
+Question: A bag has 9 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 9/16
+
+Problem 95
+Question: Solve for x: 6x + 10 = 90.
+Answer: x = 13.333333333333334
+
+Problem 96
+Question: A factory produced 332 items. 40% passed inspection on the first try. Of the remaining items, 12 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 144
+
+Problem 97
+Question: A factory produced 130 items. 38% passed inspection on the first try. Of the remaining items, 48 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 97
+
+Problem 98
+Question: A rectangle has length 36 and width 17. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 596
+
+Problem 99
+Question: A bag has 4 red and 4 blue balls. What is the probability that one draw is red?
+Answer: 4/8
+
+Problem 100
+Question: A rectangle has length 37 and width 8. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 280
+
+Problem 101
+Question: The sum of two consecutive odd integers is 356. Find the larger integer.
+Answer: 179
+
+Problem 102
+Question: Solve for x: 9x + 2 = 76.
+Answer: x = 8.222222222222221
+
+Problem 103
+Question: The sum of two consecutive odd integers is 316. Find the larger integer.
+Answer: 159
+
+Problem 104
+Question: The sum of two consecutive odd integers is 196. Find the larger integer.
+Answer: 99
+
+Problem 105
+Question: The sum of two consecutive odd integers is 166. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 106
+Question: A rectangle has length 13 and width 13. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 165
+
+Problem 107
+Question: A bag has 4 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 4/12
+
+Problem 108
+Question: The sum of two consecutive odd integers is 238. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 109
+Question: A rectangle has length 10 and width 15. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 141
+
+Problem 110
+Question: A rectangle has length 27 and width 12. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 308
+
+Problem 111
+Question: A factory produced 677 items. 59% passed inspection on the first try. Of the remaining items, 47 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 446
+
+Problem 112
+Question: Solve for x: 3x + -5 = 66.
+Answer: x = 23.666666666666668
+
+Problem 113
+Question: A factory produced 369 items. 45% passed inspection on the first try. Of the remaining items, 14 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 180
+
+Problem 114
+Question: A rectangle has length 12 and width 7. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 80
+
+Problem 115
+Question: A factory produced 417 items. 42% passed inspection on the first try. Of the remaining items, 41 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 216
+
+Problem 116
+Question: A bag has 5 red and 4 blue balls. What is the probability that one draw is red?
+Answer: 5/9
+
+Problem 117
+Question: Solve for x: 7x + -16 = 140.
+Answer: x = 22.285714285714285
+
+Problem 118
+Question: The sum of two consecutive odd integers is 130. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 119
+Question: The sum of two consecutive odd integers is 112. Find the larger integer.
+Answer: 57
+
+Problem 120
+Question: A rectangle has length 27 and width 8. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 200
+
+Problem 121
+Question: The sum of two consecutive odd integers is 144. Find the larger integer.
+Answer: 73
+
+Problem 122
+Question: The sum of two consecutive odd integers is 318. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 123
+Question: A factory produced 443 items. 59% passed inspection on the first try. Of the remaining items, 45 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 306
+
+Problem 124
+Question: The sum of two consecutive odd integers is 130. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 125
+Question: A rectangle has length 35 and width 22. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 761
+
+Problem 126
+Question: A factory produced 851 items. 35% passed inspection on the first try. Of the remaining items, 26 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 323
+
+Problem 127
+Question: A factory produced 818 items. 48% passed inspection on the first try. Of the remaining items, 37 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 429
+
+Problem 128
+Question: Solve for x: 6x + 14 = 122.
+Answer: x = 18.0
+
+Problem 129
+Question: Solve for x: 9x + -20 = 111.
+Answer: x = 14.555555555555555
+
+Problem 130
+Question: A rectangle has length 18 and width 13. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 209
+
+Problem 131
+Question: A factory produced 781 items. 46% passed inspection on the first try. Of the remaining items, 46 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 405
+
+Problem 132
+Question: A factory produced 183 items. 42% passed inspection on the first try. Of the remaining items, 47 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 123
+
+Problem 133
+Question: The sum of two consecutive odd integers is 342. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 134
+Question: The sum of two consecutive odd integers is 110. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 135
+Question: A rectangle has length 25 and width 17. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 400
+
+Problem 136
+Question: The sum of two consecutive odd integers is 352. Find the larger integer.
+Answer: 177
+
+Problem 137
+Question: A factory produced 359 items. 51% passed inspection on the first try. Of the remaining items, 10 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 193
+
+Problem 138
+Question: The sum of two consecutive odd integers is 310. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 139
+Question: A rectangle has length 40 and width 25. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 975
+
+Problem 140
+Question: The sum of two consecutive odd integers is 162. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 141
+Question: A rectangle has length 39 and width 20. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 771
+
+Problem 142
+Question: A bag has 8 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 8/15
+
+Problem 143
+Question: The sum of two consecutive odd integers is 64. Find the larger integer.
+Answer: 33
+
+Problem 144
+Question: A factory produced 643 items. 43% passed inspection on the first try. Of the remaining items, 20 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 296
+
+Problem 145
+Question: Solve for x: 5x + -1 = 86.
+Answer: x = 17.4
+
+Problem 146
+Question: A rectangle has length 31 and width 10. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 285
+
+Problem 147
+Question: Solve for x: 3x + -13 = 141.
+Answer: x = 51.333333333333336
+
+Problem 148
+Question: Solve for x: 8x + -9 = 49.
+Answer: x = 7.25
+
+Problem 149
+Question: A rectangle has length 35 and width 11. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 381
+
+Problem 150
+Question: A bag has 9 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 9/17
+
+Problem 151
+Question: A bag has 5 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 5/8
+
+Problem 152
+Question: Solve for x: 3x + -4 = 35.
+Answer: x = 13.0
+
+Problem 153
+Question: A rectangle has length 13 and width 9. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 113
+
+Problem 154
+Question: A bag has 6 red and 9 blue balls. What is the probability that one draw is red?
+Answer: 6/15
+
+Problem 155
+Question: A bag has 9 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 9/14
+
+Problem 156
+Question: A rectangle has length 36 and width 9. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 299
+
+Problem 157
+Question: The sum of two consecutive odd integers is 100. Find the larger integer.
+Answer: 51
+
+Problem 158
+Question: A bag has 9 red and 4 blue balls. What is the probability that one draw is red?
+Answer: 9/13
+
+Problem 159
+Question: A rectangle has length 25 and width 12. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 275
+
+Problem 160
+Question: Solve for x: 2x + -8 = 145.
+Answer: x = 76.5
+
+Problem 161
+Question: A bag has 3 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 3/6
+
+Problem 162
+Question: Solve for x: 5x + -4 = 62.
+Answer: x = 13.2
+
+Problem 163
+Question: The sum of two consecutive odd integers is 184. Find the larger integer.
+Answer: 93
+
+Problem 164
+Question: The sum of two consecutive odd integers is 316. Find the larger integer.
+Answer: 159
+
+Problem 165
+Question: The sum of two consecutive odd integers is 178. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 166
+Question: A rectangle has length 24 and width 19. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 447
+
+Problem 167
+Question: Solve for x: 7x + 11 = 117.
+Answer: x = 15.142857142857142
+
+Problem 168
+Question: A factory produced 333 items. 56% passed inspection on the first try. Of the remaining items, 34 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 220
+
+Problem 169
+Question: The sum of two consecutive odd integers is 184. Find the larger integer.
+Answer: 93
+
+Problem 170
+Question: A factory produced 144 items. 27% passed inspection on the first try. Of the remaining items, 46 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 84
+
+Problem 171
+Question: A factory produced 678 items. 38% passed inspection on the first try. Of the remaining items, 18 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 275
+
+Problem 172
+Question: A factory produced 632 items. 43% passed inspection on the first try. Of the remaining items, 46 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 317
+
+Problem 173
+Question: A rectangle has length 35 and width 21. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 719
+
+Problem 174
+Question: Solve for x: 7x + -20 = 41.
+Answer: x = 8.714285714285714
+
+Problem 175
+Question: A bag has 10 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 10/18
+
+Problem 176
+Question: A rectangle has length 33 and width 15. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 470
+
+Problem 177
+Question: A factory produced 783 items. 44% passed inspection on the first try. Of the remaining items, 34 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 378
+
+Problem 178
+Question: The sum of two consecutive odd integers is 324. Find the larger integer.
+Answer: 163
+
+Problem 179
+Question: A factory produced 404 items. 60% passed inspection on the first try. Of the remaining items, 48 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 290
+
+Problem 180
+Question: Solve for x: 5x + 9 = 142.
+Answer: x = 26.6
+
+Problem 181
+Question: A bag has 7 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 7/12
+
+Problem 182
+Question: A bag has 6 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 6/14
+
+Problem 183
+Question: Solve for x: 2x + 4 = 119.
+Answer: x = 57.5
+
+Problem 184
+Question: A bag has 8 red and 4 blue balls. What is the probability that one draw is red?
+Answer: 8/12
+
+Problem 185
+Question: A bag has 6 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 6/13
+
+Problem 186
+Question: A factory produced 536 items. 60% passed inspection on the first try. Of the remaining items, 19 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 340
+
+Problem 187
+Question: A bag has 7 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 7/12
+
+Problem 188
+Question: A factory produced 739 items. 20% passed inspection on the first try. Of the remaining items, 32 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 179
+
+Problem 189
+Question: A rectangle has length 34 and width 22. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 732
+
+Problem 190
+Question: The sum of two consecutive odd integers is 276. Find the larger integer.
+Answer: 139
+
+Problem 191
+Question: A rectangle has length 39 and width 10. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 365
+
+Problem 192
+Question: Solve for x: 2x + -3 = 140.
+Answer: x = 71.5
+
+Problem 193
+Question: A factory produced 882 items. 57% passed inspection on the first try. Of the remaining items, 37 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 539
+
+Problem 194
+Question: A factory produced 483 items. 24% passed inspection on the first try. Of the remaining items, 38 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 153
+
+Problem 195
+Question: A factory produced 288 items. 52% passed inspection on the first try. Of the remaining items, 20 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 169
+
+Problem 196
+Question: A factory produced 531 items. 60% passed inspection on the first try. Of the remaining items, 27 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 345
+
+Problem 197
+Question: Solve for x: 6x + -7 = 145.
+Answer: x = 25.333333333333332
+
+Problem 198
+Question: The sum of two consecutive odd integers is 160. Find the larger integer.
+Answer: 81
+
+Problem 199
+Question: A rectangle has length 25 and width 7. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 171
+
+Problem 200
+Question: Solve for x: 12x + 3 = 129.
+Answer: x = 10.5
+
+Problem 201
+Question: Solve for x: 10x + -17 = 53.
+Answer: x = 7.0
+
+Problem 202
+Question: A rectangle has length 25 and width 16. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 391
+
+Problem 203
+Question: A bag has 9 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 9/14
+
+Problem 204
+Question: A bag has 7 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 7/15
+
+Problem 205
+Question: The sum of two consecutive odd integers is 172. Find the larger integer.
+Answer: 87
+
+Problem 206
+Question: Solve for x: 5x + -19 = 113.
+Answer: x = 26.4
+
+Problem 207
+Question: A rectangle has length 35 and width 12. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 404
+
+Problem 208
+Question: The sum of two consecutive odd integers is 76. Find the larger integer.
+Answer: 39
+
+Problem 209
+Question: The sum of two consecutive odd integers is 336. Find the larger integer.
+Answer: 169
+
+Problem 210
+Question: A bag has 5 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 5/12
+
+Problem 211
+Question: A bag has 5 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 5/10
+
+Problem 212
+Question: The sum of two consecutive odd integers is 264. Find the larger integer.
+Answer: 133
+
+Problem 213
+Question: A rectangle has length 27 and width 17. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 450
+
+Problem 214
+Question: A factory produced 855 items. 33% passed inspection on the first try. Of the remaining items, 29 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 311
+
+Problem 215
+Question: A factory produced 228 items. 34% passed inspection on the first try. Of the remaining items, 35 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 112
+
+Problem 216
+Question: A rectangle has length 39 and width 8. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 303
+
+Problem 217
+Question: A factory produced 176 items. 58% passed inspection on the first try. Of the remaining items, 11 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 113
+
+Problem 218
+Question: The sum of two consecutive odd integers is 388. Find the larger integer.
+Answer: 195
+
+Problem 219
+Question: A factory produced 626 items. 53% passed inspection on the first try. Of the remaining items, 49 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 380
+
+Problem 220
+Question: A bag has 8 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 8/15
+
+Problem 221
+Question: A factory produced 747 items. 31% passed inspection on the first try. Of the remaining items, 16 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 247
+
+Problem 222
+Question: The sum of two consecutive odd integers is 244. Find the larger integer.
+Answer: 123
+
+Problem 223
+Question: The sum of two consecutive odd integers is 292. Find the larger integer.
+Answer: 147
+
+Problem 224
+Question: A bag has 9 red and 5 blue balls. What is the probability that one draw is red?
+Answer: 9/14
+
+Problem 225
+Question: The sum of two consecutive odd integers is 160. Find the larger integer.
+Answer: 81
+
+Problem 226
+Question: A rectangle has length 37 and width 22. A square of side 5 is cut from one corner. Find the remaining area.
+Answer: 789
+
+Problem 227
+Question: The sum of two consecutive odd integers is 270. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 228
+Question: A rectangle has length 29 and width 20. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 576
+
+Problem 229
+Question: The sum of two consecutive odd integers is 80. Find the larger integer.
+Answer: 41
+
+Problem 230
+Question: A factory produced 135 items. 20% passed inspection on the first try. Of the remaining items, 40 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 67
+
+Problem 231
+Question: A rectangle has length 32 and width 23. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 720
+
+Problem 232
+Question: The sum of two consecutive odd integers is 244. Find the larger integer.
+Answer: 123
+
+Problem 233
+Question: The sum of two consecutive odd integers is 370. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 234
+Question: The sum of two consecutive odd integers is 54. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 235
+Question: A factory produced 516 items. 29% passed inspection on the first try. Of the remaining items, 44 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 193
+
+Problem 236
+Question: A factory produced 698 items. 44% passed inspection on the first try. Of the remaining items, 26 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 333
+
+Problem 237
+Question: The sum of two consecutive odd integers is 80. Find the larger integer.
+Answer: 41
+
+Problem 238
+Question: A bag has 7 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 7/10
+
+Problem 239
+Question: A factory produced 669 items. 23% passed inspection on the first try. Of the remaining items, 43 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 196
+
+Problem 240
+Question: The sum of two consecutive odd integers is 60. Find the larger integer.
+Answer: 31
+
+Problem 241
+Question: A rectangle has length 15 and width 18. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 266
+
+Problem 242
+Question: The sum of two consecutive odd integers is 54. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 243
+Question: A bag has 5 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 5/12
+
+Problem 244
+Question: The sum of two consecutive odd integers is 378. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 245
+Question: A bag has 9 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 9/17
+
+Problem 246
+Question: A rectangle has length 24 and width 25. A square of side 3 is cut from one corner. Find the remaining area.
+Answer: 591
+
+Problem 247
+Question: The sum of two consecutive odd integers is 70. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 248
+Question: Solve for x: 11x + -9 = 99.
+Answer: x = 9.818181818181818
+
+Problem 249
+Question: A bag has 3 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 3/11
+
+Problem 250
+Question: Solve for x: 8x + 14 = 61.
+Answer: x = 5.875
+
+Problem 251
+Question: Solve for x: 8x + -16 = 78.
+Answer: x = 11.75
+
+Problem 252
+Question: Solve for x: 3x + -4 = 55.
+Answer: x = 19.666666666666668
+
+Problem 253
+Question: A factory produced 274 items. 23% passed inspection on the first try. Of the remaining items, 23 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 86
+
+Problem 254
+Question: A bag has 3 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 3/6
+
+Problem 255
+Question: A factory produced 645 items. 50% passed inspection on the first try. Of the remaining items, 42 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 364
+
+Problem 256
+Question: A rectangle has length 14 and width 15. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 206
+
+Problem 257
+Question: The sum of two consecutive odd integers is 312. Find the larger integer.
+Answer: 157
+
+Problem 258
+Question: A factory produced 573 items. 28% passed inspection on the first try. Of the remaining items, 35 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 195
+
+Problem 259
+Question: A bag has 3 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 3/10
+
+Problem 260
+Question: A factory produced 376 items. 40% passed inspection on the first try. Of the remaining items, 15 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 165
+
+Problem 261
+Question: A rectangle has length 10 and width 17. A square of side 2 is cut from one corner. Find the remaining area.
+Answer: 166
+
+Problem 262
+Question: A rectangle has length 28 and width 9. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 236
+
+Problem 263
+Question: A bag has 4 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 4/11
+
+Problem 264
+Question: A factory produced 555 items. 35% passed inspection on the first try. Of the remaining items, 42 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 236
+
+Problem 265
+Question: Solve for x: 5x + 1 = 96.
+Answer: x = 19.0
+
+Problem 266
+Question: Solve for x: 8x + 17 = 133.
+Answer: x = 14.5
+
+Problem 267
+Question: A factory produced 252 items. 48% passed inspection on the first try. Of the remaining items, 43 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 163
+
+Problem 268
+Question: Solve for x: 11x + 13 = 147.
+Answer: x = 12.181818181818182
+
+Problem 269
+Question: A factory produced 418 items. 30% passed inspection on the first try. Of the remaining items, 22 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 147
+
+Problem 270
+Question: A rectangle has length 32 and width 21. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 656
+
+Problem 271
+Question: A factory produced 539 items. 42% passed inspection on the first try. Of the remaining items, 18 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 244
+
+Problem 272
+Question: Solve for x: 3x + -18 = 86.
+Answer: x = 34.666666666666664
+
+Problem 273
+Question: Solve for x: 7x + 6 = 86.
+Answer: x = 11.428571428571429
+
+Problem 274
+Question: A rectangle has length 30 and width 13. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 374
+
+Problem 275
+Question: Solve for x: 10x + -20 = 144.
+Answer: x = 16.4
+
+Problem 276
+Question: A factory produced 272 items. 40% passed inspection on the first try. Of the remaining items, 30 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 138
+
+Problem 277
+Question: A rectangle has length 12 and width 19. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 212
+
+Problem 278
+Question: A bag has 10 red and 8 blue balls. What is the probability that one draw is red?
+Answer: 10/18
+
+Problem 279
+Question: A bag has 4 red and 3 blue balls. What is the probability that one draw is red?
+Answer: 4/7
+
+Problem 280
+Question: The sum of two consecutive odd integers is 64. Find the larger integer.
+Answer: 33
+
+Problem 281
+Question: Solve for x: 9x + 16 = 74.
+Answer: x = 6.444444444444445
+
+Problem 282
+Question: The sum of two consecutive odd integers is 398. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 283
+Question: Solve for x: 7x + 3 = 104.
+Answer: x = 14.428571428571429
+
+Problem 284
+Question: A bag has 7 red and 10 blue balls. What is the probability that one draw is red?
+Answer: 7/17
+
+Problem 285
+Question: Solve for x: 7x + 14 = 139.
+Answer: x = 17.857142857142858
+
+Problem 286
+Question: The sum of two consecutive odd integers is 54. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 287
+Question: The sum of two consecutive odd integers is 168. Find the larger integer.
+Answer: 85
+
+Problem 288
+Question: The sum of two consecutive odd integers is 328. Find the larger integer.
+Answer: 165
+
+Problem 289
+Question: The sum of two consecutive odd integers is 96. Find the larger integer.
+Answer: 49
+
+Problem 290
+Question: The sum of two consecutive odd integers is 250. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 291
+Question: Solve for x: 2x + -14 = 149.
+Answer: x = 81.5
+
+Problem 292
+Question: A rectangle has length 14 and width 11. A square of side 4 is cut from one corner. Find the remaining area.
+Answer: 138
+
+Problem 293
+Question: A factory produced 767 items. 56% passed inspection on the first try. Of the remaining items, 43 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 472
+
+Problem 294
+Question: A factory produced 194 items. 33% passed inspection on the first try. Of the remaining items, 21 were repaired and all repaired items passed. How many items passed inspection in total?
+Answer: 85
+
+Problem 295
+Question: Solve for x: 8x + -19 = 104.
+Answer: x = 15.375
+
+Problem 296
+Question: A bag has 7 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 7/13
+
+Problem 297
+Question: The sum of two consecutive odd integers is 346. Find the larger integer.
+Answer: Cannot determine uniquely because sum of consecutive odd integers is divisible by 4 only.
+
+Problem 298
+Question: A bag has 6 red and 9 blue balls. What is the probability that one draw is red?
+Answer: 6/15
+
+Problem 299
+Question: A bag has 8 red and 6 blue balls. What is the probability that one draw is red?
+Answer: 8/14
+
+Problem 300
+Question: A bag has 4 red and 7 blue balls. What is the probability that one draw is red?
+Answer: 4/11
+
+
