@@ -3,22 +3,30 @@
 Model collection for building your own LLM End-to-End.  
 
 
-## 🚀 Key Features  
-* **Mistral-style MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
+## 🚀 Features  
+* **Mistral-style Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
 * **Dropless Routing** for MoE: It processes every single token. If an expert is assigned 10x more tokens than others, the model calculates all of them. This ensures no information loss and makes it run faster in GPU based training.  
-* **RoPE** and **YaRN** scaling: Advanced positional encoding to improve long-context coherence and relative positional tracking.  
-* RMSNorm: Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
+* **RoPE** and **YaRN** scaling to improve long-context coherence and scaling.  
+* **QK Norm**: Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
 * Hyperparameter Scaling Configuration: Integrated tuning layout designed to quickly experiment with model sizes, expert counts, and optimization boundaries.  
+* MLA with weight absorption (DeepSeek-V2).  
+* Deep-Network Residual Scaling Initialization, to avoid model drifting during scaling.  
+* *min-p* and *temp* scaling for autoregressive decoding.  
+* Can be trained and used in both **Windows** and **Linux** based environments, bypassing certain FlashAttention and Linux ONLY requirement bottlenecks.  
 
 
 *To-Do*: Add **Per-Layer QK-Norm** like Minimax M2.  
 
 
-## 🏗️ Architecture Design  
+## Models  
 
-The MoE variant implements a Decoder-only Transformer framework with a sparse top- $k$ gating routing layer over multiple Feed-Forward Network (FFN) blocks, which uses *SwiGLU* activation.  
-The standard GPT variant (*new*) has Dense FeedForward layers and option to switch between SwiGLU and GELU activations.  
+### MixGPT  
 
+This MHA-MoE fusion variant implements a Decoder Transformer with a sparse top- $k$ gating routing layer over multiple Feed-Forward Network (FFN) blocks, which uses *SwiGLU* activation.  
+
+It has Dense FeedForward Network too, which can use either *SwiGLU* or *GELU* activations.  
+
+__🏗️ Architecture Design__  
 
 ```
 [Token Input] -> [Embedding + RoPE] -> [Multi-Head Attention] -> [MoE Gate Router]
@@ -33,7 +41,6 @@ The standard GPT variant (*new*) has Dense FeedForward layers and option to swit
 ```  
 
 
-
 The model integrates RoPE and YaRN scaling. So if `scale_factor` is 1, it uses RoPE, otherwise YaRN scaling.  
 During inference, you can adjust `new_scale_factor` to get higher context length range.  
 
@@ -42,31 +49,70 @@ During inference, you can adjust `new_scale_factor` to get higher context length
     final_scale_factor = og_scale_factor + new_scale_factor
 ``` 
 
-With `bf16` precision one can reach this max scale on a free Colab GPU:
+### MimiKoKo-M1  
 
-```
-org_context_length: 2048  
-scale: 2  
-model_dim: 1536  
-num_heads: 16  
-num_layers: 12  
+DeepSeek-V2 MLA architecture for Single GPU usage. It can use either Dense or MoE as FFN. This architecture can use a mixture of MoE and non-MoE FFN, just like the original DS-V2.  
 
-(14.4 GB GPU)  
-Total parameters: 459.86M
-``` 
+
+__🏗️ Architecture Design__  
+ 
+
+__Attention Topology__  
+
+![alt text](image.png)  
+
+
+__Model Topology__  
+
+```text
+[Input Tokens]
+       │
+   [Embedding]
+       │
+ ┌─────┴──────────────────────────────────┐
+ │  Transformer Decoder Layer (x Layers)  │
+ │                                        │
+ │  ┌───────────[ RMSNorm ]────────────┐  │
+ │  │                                  │  │
+ │  │   Multi-Head Latent Attention   │  │
+ │  │   - Low-Rank Compression        │  │
+ │  │   - Weight Absorption Matrix    │  │
+ │  └──────────────────────────────────┘  │
+ │                  │                     │
+ │            (Residual Add)              │
+ │                  │                     │
+ │  ┌───────────[ RMSNorm ]────────────┐  │
+ │  │                                  │  │
+ │  │     MoE Block / SwiGLU FFN       │  │
+ │  │     - Top-K Expert Router        │  │
+ │  │     - Token Indexing (No Pad)    │  │
+ │  └──────────────────────────────────┘  │
+ │                  │                     │
+ │            (Residual Add)              │
+ └──────────────────┬─────────────────────┘
+                    │
+              [ Final Norm ]
+                    │
+               [ LM Head ] ──> [ Output Logits ]
+```  
+
+
+![alt text](Architecture_dia_M1+M2.png)  
+
+
 
 ## 🧠 Inference  
 
 Integrated `min_p` and `temp` filtering to select the best token.  
 
 ```python 
-    prompt = "The cat (Felis"
+    prompt = "The cat is a"
     gen_token_count = 512
 
     print(f"\nGenerating with Min-P...")
     gen_st_time = time.perf_counter()
 
-    token_ids = generate_minP(
+    token_ids = generate(
         model=model,
         tokenizer=tokenizer,
         prompt=prompt.strip(),
@@ -77,6 +123,11 @@ Integrated `min_p` and `temp` filtering to select the best token.
         use_cache=True
     )
 ```  
+
+There are few optimizations that have been left out, which are normally geared towards Linux environment.  
+(Compile, Grouped GEMMs, FlashAttention kernel, ...)
+
+________________  
 
 ## 📈 Training Run Stats  
 
@@ -112,6 +163,19 @@ __*Resource usage comparison*__ =>
     * Training runtime: 1802.65 s  
     * GPU VRAM: 8.2 GB  
     * Avg. Step time: 0.6502 s  
+
+    With `bf16` precision one can reach this max scale on a free Colab GPU:  
+
+    ```
+    org_context_length: 2048  
+    scale: 2  
+    model_dim: 1536  
+    num_heads: 16  
+    num_layers: 12  
+
+    (14.4 GB GPU)  
+    Total parameters: 459.86M
+    ```  
 
 2) **MimiKoKo-M1**  
     For MLA, one can use these approx. max configs on a free Colab GPU:  

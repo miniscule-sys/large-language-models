@@ -13,9 +13,11 @@ Developed initially for research and exploration within Google Colab, the collec
 
 
 ## 🚀 Key Features  
-* **Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
-* **Dropless Routing** for MoE: It processes every single token. If an expert is assigned 10x more tokens than others, the model calculates all of them. This ensures no information loss and makes it run faster in GPU based training.  
-* **RoPE** and **YaRN** scaling: Advanced positional encoding to improve long-context coherence and relative positional tracking.  
+* Included both **Sparse MoE** and Dense Feed-Forward Network  
+* **Dropless Routing** for MoE  
+* **RoPE** positional embedding and **YaRN** scaling  
+* **Training**, with cosine warm-up, gradient accumulation and weight initialization + **Autoregressive Decoding**, with *min_p* and *temp* scaling  
+* __Architectures__: MLA, MHA, MoE, ... *more coming soon*  
 
 
 ## Setup  
