@@ -150,5 +150,4 @@ Fastest inference time was for Dense variant with kv-cache ON.
 
 ________  
 
-It will be under development with more small model implementation and experiemental results.  
 
