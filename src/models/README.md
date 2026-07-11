@@ -15,8 +15,6 @@ Model collection for building your own LLM End-to-End.
 * Can be trained and used in both **Windows** and **Linux** based environments, bypassing certain FlashAttention and Linux ONLY requirement bottlenecks.  
 
 
-*To-Do*: Add **Per-Layer QK-Norm** like Minimax M2.  
-
 
 ## Models  
 
