@@ -7,7 +7,7 @@ Model collection for building your own LLM End-to-End.
 * **Mistral-style Sparse MoE** Core: Custom deterministic token routing logic mapping tokens to top- $k$ expert sub-networks to increase model capacity without proportional compute costs.
 * **Dropless Routing** for MoE: It processes every single token. If an expert is assigned 10x more tokens than others, the model calculates all of them. This ensures no information loss and makes it run faster in GPU based training.  
 * **RoPE** and **YaRN** scaling to improve long-context coherence and scaling.  
-* **QK Norm**: Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
+* **QK Norm** (non-MLA): Modern layer normalization applied globally for stabilizer scale-invariance during high-throughput training runs.  
 * Hyperparameter Scaling Configuration: Integrated tuning layout designed to quickly experiment with model sizes, expert counts, and optimization boundaries.  
 * MLA with weight absorption (DeepSeek-V2).  
 * Deep-Network Residual Scaling Initialization, to avoid model drifting during scaling.  
