@@ -51,8 +51,9 @@ During inference, you can adjust `new_scale_factor` to get higher context length
 
 DeepSeek-V2 MLA architecture for Single GPU usage. It can use either Dense or MoE as FFN. This architecture can use a mixture of MoE and non-MoE FFN, just like the original DS-V2.  
 
-**M1.0**: Using only RoPE  
-**M1.1**: Using RoPE/YaRN  
+**M1.0**: MLA + standard sparse MoE (Hybrid FFN) + RoPE  
+**M1.1**: M-1.0 + RoPE/YaRN  
+**M1.2**: MLA + SparseMoE with shared exp + standard sparse MoE (Hybrid FFN) + RoPE/YaRN  
 
 
 __🏗️ Architecture Design__  
