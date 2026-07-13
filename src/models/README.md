@@ -210,8 +210,48 @@ __*Resource usage comparison*__ =>
     GPU: 13.4 GB***  
 
 
-
 Fastest inference time was for Dense variant with kv-cache ON.  
+
+
+---
+
+## 📊 Performance & Resource Utilization Benchmark  
+
+A comprehensive comparison of Multi-Head Attention (MHA) vs. Multi-Head Latent Attention (MLA) architectures under both Dense and Mixture of Experts (MoE) configurations.
+
+### ⚙️ Evaluation Configurations  
+
+* **Core Architecture:** $d_{model} = 1024$, 16 Heads, 8 Layers, Context Length = 1024, Dropout = 0.1 
+* **MoE Parameters:** 4 Experts, Top-2 Routing ($k=2$) 
+* **Precision:** BF16 mixed precision  
+
+---
+
+### 🚀 Hardware Profile & Convergence Summary  
+
+| Model Variant | Total Params | Active Params | Avg Step Time | GPU VRAM | Final Accuracy | Training Steps |
+| --- | --- | --- | --- | --- | --- | --- |
+| **MHA Dense** *(MixGPT)* | 123.03 M | 123.03 M | 0.2080 s | 4.3 GB | 99.71% | 2,500 |
+| **MHA MoE** *(MixGPT)* | 240.50 M | 139.84 M | 0.2949 s | 5.3 GB | 99.37% | 2,500 |
+| **MLA Dense** *(MimiKoKo-M1)** | 134.05 M | 134.05 M | 0.1971 s | 4.2 GB | 99.51% | 5,280 |
+| **MLA MoE** *(MimiKoKo-M1)** | 251.52 M | 150.86 M | 0.2816 s | 5.3 GB | 99.46% | 5,280 |
+
+> `*` **Note:** MLA configurations leverage low-rank projection parameters ($q_{lora\_rank} = 512$, $kv_{lora\_rank} = 256$) to sustain throughput.
+
+### 🔑 Key Takeaways  
+
+1. **Latent Compression Efficiency**  
+Despite having a slightly larger absolute parameter footprint (~11M more) due to the low-rank projection matrices, MLA (MimiKoKo-M1) consistently outperforms MHA in compute speed. It yields a 5.2% speedup in Dense configurations and a 4.5% speedup in MoE setups.
+
+2. **Memory Footprint Optimization**  
+MLA manages to decrease or maintain peak GPU memory consumption compared to MHA (4.2 GB vs 4.3 GB in Dense modes), despite carrying more parameters. This demonstrates the hardware advantages of compressing the Key-Value (KV) cache into a low-dimensional latent space during execution.
+
+---
+
+### 📈 Hardware Resource Utilization  
+
+
+![alt text](hardware_comparison.png)  
 
 
 ________  
