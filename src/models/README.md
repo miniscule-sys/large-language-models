@@ -229,6 +229,8 @@ A comprehensive comparison of Multi-Head Attention (MHA) vs. Multi-Head Latent A
 
 ### 🚀 Hardware Profile & Convergence Summary  
 
+__Training__  
+
 | Model Variant | Total Params | Active Params | Avg Step Time | GPU VRAM | Final Accuracy | Training Steps |
 | --- | --- | --- | --- | --- | --- | --- |
 | **MHA Dense** *(MixGPT)* | 123.03 M | 123.03 M | 0.2080 s | 4.3 GB | 99.71% | 2,500 |
@@ -236,23 +238,40 @@ A comprehensive comparison of Multi-Head Attention (MHA) vs. Multi-Head Latent A
 | **MLA Dense** *(MimiKoKo-M1)** | 134.05 M | 134.05 M | 0.1971 s | 4.2 GB | 99.51% | 5,280 |
 | **MLA MoE** *(MimiKoKo-M1)** | 251.52 M | 150.86 M | 0.2816 s | 5.3 GB | 99.46% | 5,280 |
 
-> `*` **Note:** MLA configurations leverage low-rank projection parameters ($q_{lora\_rank} = 512$, $kv_{lora\_rank} = 256$) to sustain throughput.
+> ***Note:*** MLA configurations leverage low-rank projection parameters ($q_{lora\_rank} = 512$, $kv_{lora\_rank} = 256$) to sustain throughput.
+
+__Inference__  
+
+| Model Variant | GPU Memory (GB) ↓ | Throughput (tokens/sec) ↑ | Architecture Style |
+| --- | --- | --- | --- |
+| **MixGPT-Dense** | 1.1 | 130.0 | Dense |
+| **MiimiKoKo-Dense** | 1.0 | 92.5 | Dense |
+| **MixGPT-MoE** | 1.8 | 70.0 | Mixture of Experts (MoE) |
+| **MimiKoKo-MoE** | 1.6 | 50.0 | Mixture of Experts (MoE) |
+
 
 ### 🔑 Key Takeaways  
 
+*For Training* ...  
 1. **Latent Compression Efficiency**  
-Despite having a slightly larger absolute parameter footprint (~11M more) due to the low-rank projection matrices, MLA (MimiKoKo-M1) consistently outperforms MHA in compute speed. It yields a 5.2% speedup in Dense configurations and a 4.5% speedup in MoE setups.
+Despite having a slightly larger absolute parameter footprint (~11M more) due to the low-rank projection matrices, MLA (MimiKoKo-M1) consistently outperforms MHA in compute speed. It yields a 5.2% speedup in Dense configurations and a 4.5% speedup in MoE setups.  
 
 2. **Memory Footprint Optimization**  
-MLA manages to decrease or maintain peak GPU memory consumption compared to MHA (4.2 GB vs 4.3 GB in Dense modes), despite carrying more parameters. This demonstrates the hardware advantages of compressing the Key-Value (KV) cache into a low-dimensional latent space during execution.
+MLA manages to decrease or maintain peak GPU memory consumption compared to MHA (4.2 GB vs 4.3 GB in Dense modes), despite carrying more parameters. This demonstrates the hardware advantages of compressing the Key-Value (KV) cache into a low-dimensional latent space during execution.  
+
+*During Inference*, MLA clearly shows memory saving but at the cost of throughput speed. Under these config, **MLA_wDense** network is the best choice, for both training and inference cycles.  
 
 ---
 
 ### 📈 Hardware Resource Utilization  
 
+__Training__  
 
 ![alt text](hardware_comparison.png)  
 
+__Inference__  
+
+![alt text](inference_comparison_fig.png)
 
 ________  
 
