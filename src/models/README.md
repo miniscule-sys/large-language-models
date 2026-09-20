@@ -13,7 +13,7 @@ Model collection for building your own LLM End-to-End.
 * Deep-Network Residual Scaling Initialization, to avoid model drifting during scaling.  
 * *min-p* and *temp* scaling for autoregressive decoding.  
 * Can be trained and used in both **Windows** and **Linux** based environments, bypassing certain FlashAttention and Linux ONLY requirement bottlenecks.  
-
+* Kimi's **Delta Attention** with chunkwise parallelized formulation
 
 
 ## Models  
@@ -46,8 +46,9 @@ During inference, you can adjust `new_scale_factor` to get higher context length
     new_scale_factor:int = 0  # Adjust this if you want to extend context further during generation
     final_scale_factor = og_scale_factor + new_scale_factor
 ``` 
+____________________  
 
-### MimiKoKo-M1  
+### MimiKoKo-M1 (DeepSeek's MLA)  
 
 DeepSeek-V2 MLA architecture for Single GPU usage. It can use either Dense or MoE as FFN. This architecture can use a mixture of MoE and non-MoE FFN, just like the original DS-V2.  
 
@@ -101,6 +102,20 @@ __Model Topology__
 
 ![alt text](Architecture_dia_M1+M2.png)  
 
+____________________  
+
+### MimiKoKo-D1 (Kimi Delta Attention)  
+
+This model contains an best-to-the knowledge implementaion of Kimi's KDA architecture with a Dense FF network.  
+
+__Architecture Design__  
+
+![alt text](MimiKoKo_D1.png) ![alt text](MimiKoKoD1_decoder.png)  
+: *Model and Decoder Block*  
+
+
+![alt text](KDA_core.png)  
+: Kimi Delta Attention Core (KDA)  
 
 
 ## 🧠 Inference  
