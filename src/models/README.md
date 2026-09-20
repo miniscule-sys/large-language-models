@@ -1,6 +1,6 @@
-# LLM Pretraining  
+# Model Collections  
 
-Model collection for building your own LLM End-to-End.  
+Contains popular LLM model core architectures and techniques in *Google_Colab* notebook format for quick testing with raw data.  
 
 
 ## 🚀 Features  
