@@ -1,4 +1,4 @@
-# Pretraining models with Mixture of Experts  
+# LLM Pretraining  
 
 Model collection for building your own LLM End-to-End.  
 
