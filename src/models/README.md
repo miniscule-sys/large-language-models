@@ -106,7 +106,7 @@ ____________________
 
 ### MimiKoKo-D1 (Kimi Delta Attention)  
 
-This model contains an best-to-the knowledge implementaion of Kimi's KDA architecture with a Dense FF network.  
+This model contains a cross-platform compatible implementaion of Kimi's DeltaNet Linear Attention architecture (KDA) architecture with a Dense FF network.  
 
 __Architecture Design__  
 
