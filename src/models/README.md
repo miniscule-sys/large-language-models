@@ -1,6 +1,6 @@
-# Pretraining models with Mixture of Experts  
+# Model Collections  
 
-Model collection for building your own LLM End-to-End.  
+Contains popular LLM model core architectures and techniques in *Google_Colab* notebook format for quick testing with raw data.  
 
 
 ## 🚀 Features  
@@ -106,7 +106,13 @@ ____________________
 
 ### MimiKoKo-D1 (Kimi Delta Attention)  
 
-This model contains an best-to-the knowledge implementaion of Kimi's KDA architecture with a Dense FF network.  
+This model contains a cross-platform compatible implementaion of Kimi's DeltaNet Linear Attention architecture (KDA) architecture with a Dense FF network.  
+
+* Platform Portability (No Triton Required): Running entirely on native PyTorch operations (einsum, solve_triangular, cumsum), the model can run on any hardware, making it a universal reference.  
+* Improved Matrix Conditioning: In the chunkwise function, the scalar $\beta$ was factored out of the initial intermediate tensors ($U$ and $W$), applying it downstream in the `Aqk` and `k_decayed_beta` steps instead. By keeping $\beta$ out of the matrix $M$ before inversion, the magnitude of the values entering the *solve_triangular* function was limited. This improved the condition number of the matrix $(I + M)$, reducing floating-point rounding errors during inversion.  
+* High Hackability: Factoring the model's logic into standard block matrices makes it incredibly readable. If a researcher wants to experiment with non-causal bidirectional masking, arbitrary block sizes, or modify the delta rule itself (e.g., swapping the $L2$ norm for something else), manipulating *solve_triangular* setup takes seconds. Modifying an intertwined fused Triton kernel for the same experiment may take days.
+* It implements **Chunkwise Parallelization** during Training/Prefill stage and **Recurrent** $O(1)$ constant-time generation during decoding phase.  
+
 
 __Architecture Design__  
 
