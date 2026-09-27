@@ -62,7 +62,7 @@ __🏗️ Architecture Design__
 
 __Attention Topology__  
 
-![alt text](image.png)  
+![alt text](assets/image.png)  
 
 
 __Model Topology__  
@@ -100,7 +100,7 @@ __Model Topology__
 ```  
 
 
-![alt text](Architecture_dia_M1+M2.png)  
+![alt text](assets/Architecture_dia_M1+M2.png)  
 
 ____________________  
 
@@ -110,11 +110,11 @@ This model contains an best-to-the knowledge implementaion of Kimi's KDA archite
 
 __Architecture Design__  
 
-![alt text](MimiKoKo_D1.png) ![alt text](MimiKoKoD1_decoder.png)  
+![alt text](assets/MimiKoKo_D1.png) ![alt text](assets/MimiKoKoD1_decoder.png)  
 : *Model and Decoder Block*  
 
 
-![alt text](KDA_core.png)  
+![alt text](assets/KDA_core.png)  
 : Kimi Delta Attention Core (KDA)  
 
 
@@ -282,11 +282,11 @@ MLA manages to decrease or maintain peak GPU memory consumption compared to MHA 
 
 __Training__  
 
-![alt text](hardware_comparison.png)  
+![alt text](assets/hardware_comparison.png)  
 
 __Inference__  
 
-![alt text](inference_comparison_fig.png)
+![alt text](assets/inference_comparison_fig.png)
 
 ________  
 
